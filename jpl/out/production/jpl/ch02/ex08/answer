@@ -1,0 +1,2 @@
+LinkedList(Object value)のようなコンストラクタが必要。
+valueにはVehicleクラスのインスタンスが入る。
