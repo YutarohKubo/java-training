@@ -1,11 +1,10 @@
-package test.ch01.ex16;
+package ch01.ex16;
 
-import ch01.ex16.BadDataSetException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BadDataSetExceptionTest {
 

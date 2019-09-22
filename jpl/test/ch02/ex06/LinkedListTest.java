@@ -1,11 +1,8 @@
-package test.ch02.ex06;
+package ch02.ex06;
 
-import ch02.ex06.LinkedList;
-import ch02.ex06.Vehicle;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LinkedListTest {
 

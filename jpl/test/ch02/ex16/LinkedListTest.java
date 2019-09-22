@@ -1,10 +1,8 @@
-package test.ch02.ex16;
+package ch02.ex16;
 
-import ch02.ex16.LinkedList;
-import ch02.ex16.Vehicle;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LinkedListTest {
 

@@ -1,9 +1,8 @@
-package test.ch02.ex15;
+package ch02.ex15;
 
-import ch02.ex15.Vehicle;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VehicleTest {
 

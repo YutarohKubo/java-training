@@ -1,9 +1,9 @@
-package test.ch01.ex15;
+package ch01.ex15;
 
-import ch01.ex15.SimpleLookup;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SimpleLookupTest {
 

@@ -1,7 +1,5 @@
-package test.ch02.ex14;
+package ch02.ex14;
 
-import ch02.ex14.LinkedList;
-import ch02.ex14.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

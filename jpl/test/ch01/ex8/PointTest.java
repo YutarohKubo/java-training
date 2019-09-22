@@ -1,10 +1,10 @@
-package test.ch01.ex8;
+package ch01.ex8;
 
 import ch01.ex08.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PointTest {
 
