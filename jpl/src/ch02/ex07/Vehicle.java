@@ -10,12 +10,12 @@ public class Vehicle {
     private final int productId;
     
     public Vehicle () {
-        vehicleId++;
-        productId = new Random().nextInt(1000000) + 1;
+        this(null);
     }
 
     public Vehicle(String ownerName) {
-        this();
+        vehicleId++;
+        productId = new Random().nextInt(1000000) + 1;
         this.ownerName = ownerName;
     }
 
