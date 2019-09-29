@@ -27,19 +27,19 @@ public class Vehicle {
         return maxProductId;
     }
 
-    public void changeSpeed(double currentSpeed) {
+    public final void changeSpeed(double currentSpeed) {
         this.currentSpeed = currentSpeed;
     }
 
-    public void stop () {
+    public final void stop () {
         currentSpeed = 0;
     }
 
-    public void turn(double angle) {
+    public final void turn(double angle) {
 
     }
 
-    public void turn (int angle) {
+    public final void turn (int angle) {
 
     }
 
