@@ -23,10 +23,13 @@ public class Garage implements Cloneable {
     }
 
     @Override
-    protected Garage clone() {
+    public Garage clone() {
         try {
             Garage garage = (Garage) super.clone();
-            garage.vehicles = vehicles.clone();
+            garage.vehicles = new Vehicle[vehicles.length];
+            for (int i = 0; i < vehicles.length; i++) {
+                garage.vehicles[i] = vehicles[i].clone();
+            }
             return garage;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e.toString());
