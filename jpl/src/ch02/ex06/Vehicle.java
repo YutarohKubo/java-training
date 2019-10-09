@@ -1,7 +1,5 @@
 package ch02.ex06;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.Random;
 
 public class Vehicle {
