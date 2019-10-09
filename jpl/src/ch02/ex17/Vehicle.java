@@ -13,16 +13,16 @@ public class Vehicle {
     private static final int TURN_RIGHT = 270;
 
     public Vehicle() {
+        this(null);
+    }
+
+    public Vehicle(String ownerName) {
         vehicleId++;
         productId = new Random().nextInt(1000000) + 1;
         if (maxProductId < productId) {
             maxProductId = productId;
         }
-    }
-
-    public Vehicle(String ownerName) {
-        this();
-        this.ownerName = ownerName + "'s car!";
+        this.ownerName = ownerName;
     }
 
     public static int getMaxProductId () {

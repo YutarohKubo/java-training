@@ -1,4 +1,4 @@
-package ch02.ex14;
+package ch03.ex10;
 
 import java.util.Random;
 
@@ -23,12 +23,20 @@ public class Vehicle {
         this.ownerName = ownerName;
     }
 
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
     public static int getMaxProductId () {
         return maxProductId;
     }
 
-    public void setCurrentSpeed(double currentSpeed) {
+    public void changeSpeed(double currentSpeed) {
         this.currentSpeed = currentSpeed;
+    }
+
+    public void stop () {
+        currentSpeed = 0;
     }
 
     public void setDirection(double direction) {

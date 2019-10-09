@@ -1,4 +1,4 @@
-package ch02.ex14;
+package ch03.ex06;
 
 import java.util.Random;
 
@@ -9,6 +9,7 @@ public class Vehicle {
     private static long vehicleId;
     private final int productId;
     private static int maxProductId;
+    private EnergySource energySource;
 
     public Vehicle() {
         this(null);
@@ -27,8 +28,20 @@ public class Vehicle {
         return maxProductId;
     }
 
-    public void setCurrentSpeed(double currentSpeed) {
+    public final void changeSpeed(double currentSpeed) {
         this.currentSpeed = currentSpeed;
+    }
+
+    public final void stop () {
+        currentSpeed = 0;
+    }
+
+    public final void turn(double angle) {
+
+    }
+
+    public final void turn (int angle) {
+
     }
 
     public void setDirection(double direction) {
@@ -43,9 +56,23 @@ public class Vehicle {
         return direction;
     }
 
+    public void start () {
+        if (energySource.empty()) {
+            return;
+        }
+    }
+
     @Override
     public String toString() {
         return ownerName;
     }
+
+    /*public static void main(String[] args) {
+        if (args.length == 0) {
+            return;
+        }
+        Vehicle vehicle1 = new Vehicle(args[0]);
+        System.out.println(vehicle1);
+    }*/
 
 }

@@ -1,14 +1,15 @@
-package ch02.ex14;
+package ch03.ex09;
 
 import java.util.Random;
 
-public class Vehicle {
+public class Vehicle implements Cloneable {
     private double currentSpeed;
     private double direction;
     private String ownerName;
     private static long vehicleId;
     private final int productId;
     private static int maxProductId;
+    private EnergySource energySource;
 
     public Vehicle() {
         this(null);
@@ -23,12 +24,28 @@ public class Vehicle {
         this.ownerName = ownerName;
     }
 
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
     public static int getMaxProductId () {
         return maxProductId;
     }
 
-    public void setCurrentSpeed(double currentSpeed) {
+    public final void changeSpeed(double currentSpeed) {
         this.currentSpeed = currentSpeed;
+    }
+
+    public final void stop () {
+        currentSpeed = 0;
+    }
+
+    public final void turn(double angle) {
+
+    }
+
+    public final void turn (int angle) {
+
     }
 
     public void setDirection(double direction) {
@@ -44,8 +61,25 @@ public class Vehicle {
     }
 
     @Override
+    protected Vehicle clone(){
+        try {
+            return (Vehicle) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e.toString());
+        }
+    }
+
+    @Override
     public String toString() {
         return ownerName;
     }
+
+    /*public static void main(String[] args) {
+        if (args.length == 0) {
+            return;
+        }
+        Vehicle vehicle1 = new Vehicle(args[0]);
+        System.out.println(vehicle1);
+    }*/
 
 }
