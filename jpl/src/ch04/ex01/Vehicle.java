@@ -1,4 +1,4 @@
-package ch03.ex06;
+package ch04.ex01;
 
 import java.util.Random;
 
@@ -59,6 +59,10 @@ public class Vehicle {
 
     public double getDirection() {
         return direction;
+    }
+
+    public void setEnergySource(EnergySource energySource) {
+        this.energySource = energySource;
     }
 
     public void start () {
