@@ -1,4 +1,4 @@
-package ch03.ex11;
+package ch03.ex12;
 
 public abstract class SortDouble {
 
@@ -44,30 +44,5 @@ public abstract class SortDouble {
     }
 
     protected abstract void doSort();
-
-    //インスタンス変数をSortDouble内からしか参照できないようにするため、内部クラスにした
-    public static class SortMetrics implements Cloneable {
-
-        //SortDouble内部からしか、参照できない
-        private long probeCnt, compareCnt, swapCnt;
-
-        public void init() {
-            probeCnt = swapCnt = compareCnt = 0;
-        }
-
-        @Override
-        public String toString() {
-            return probeCnt + " probes " + compareCnt + " compares " + swapCnt + " swaps";
-        }
-
-        @Override
-        protected SortMetrics clone() {
-            try {
-                return (SortMetrics) super.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new InternalError(e.toString());
-            }
-        }
-    }
 
 }

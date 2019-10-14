@@ -1,0 +1,16 @@
+https://docs.oracle.com/javase/jp/8/docs/api/java/util/Collection.html
+
+すべてのスーパー・インタフェース:
+Iterable<E>
+既知のすべてのサブインタフェース:
+BeanContext,
+BeanContextServices,
+BlockingDeque<E>,
+BlockingQueue<E>,
+Deque<E>,
+List<E>,
+NavigableSet<E>,
+Queue<E>,
+Set<E>,
+SortedSet<E>,
+TransferQueue<E>

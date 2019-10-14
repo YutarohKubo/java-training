@@ -1,6 +1,6 @@
-package ch03.ex11;
+package ch03.ex12;
 
-public class SimpleSortDouble extends SortDouble{
+public class SimpleSortDouble extends SortDouble {
 
     @Override
     protected void doSort() {

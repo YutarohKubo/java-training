@@ -1,6 +1,4 @@
-package ch02.ex17;
-
-import ch06.ex02.TurnDirection;
+package ch06.ex02;
 
 import java.util.Random;
 
@@ -27,7 +25,7 @@ public class Vehicle {
         this.ownerName = ownerName;
     }
 
-    public static int getMaxProductId() {
+    public static int getMaxProductId () {
         return maxProductId;
     }
 
@@ -35,7 +33,7 @@ public class Vehicle {
         this.currentSpeed = currentSpeed;
     }
 
-    public void stop() {
+    public void stop () {
         currentSpeed = 0;
     }
 
@@ -44,20 +42,9 @@ public class Vehicle {
         direction %= 360;
     }
 
-    public void turn(TurnDirection direction) {
-        switch (direction) {
-            case LEFT:
-                this.direction += 90;
-                break;
-
-            case RIGHT:
-                this.direction += 270;
-                break;
-
-            default:
-                return;
-        }
-        this.direction %= 360;
+    public void turn (int angle) {
+        direction += angle;
+        direction %= 360;
     }
 
     public void setDirection(double direction) {
