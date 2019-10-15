@@ -1,5 +1,7 @@
 package ch03.ex07;
 
+import java.awt.*;
+
 public class ColorAttr extends Attr {
     private ScreenColor myColor;
 
@@ -45,11 +47,15 @@ public class ColorAttr extends Attr {
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (!(obj instanceof ColorAttr)) {
+            return false;
+        }
+
+        return obj.equals(this.myColor);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return myColor.hashCode();
     }
 }

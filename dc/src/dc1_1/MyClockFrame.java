@@ -19,6 +19,9 @@ public class MyClockFrame extends Frame {
     private String dateFormat = "yyyy-MM-dd";
     private String timeFormat = "HH:mm:ss";
 
+    private Image bufferingImg;
+    private Graphics buffer;
+
     public MyClockFrame (String title) {
         super(title);
         init();
@@ -39,7 +42,7 @@ public class MyClockFrame extends Frame {
                 currentTime = LocalDateTime.now();
                 repaint();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -48,9 +51,17 @@ public class MyClockFrame extends Frame {
         timerThread.start();
     }
 
+
+    @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        bufferingImg = createImage(FRAME_WIDTH, FRAME_HEIGHT);
+        buffer = bufferingImg.getGraphics();
         Font font = null;
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("fonts/7barSPBd.ttf"));
@@ -60,16 +71,17 @@ public class MyClockFrame extends Frame {
             e.printStackTrace();
         }
         font = font.deriveFont(48F);
-        g.setFont(font);
-        int stringDateWidth = g.getFontMetrics().stringWidth(currentTime.format(DateTimeFormatter.ofPattern(dateFormat))); //表示日付の文字列の幅を取得
-        int stringDateHeight = g.getFontMetrics().getHeight(); //表示日付の文字列の高さを取得
-        int stringTimeWidth = g.getFontMetrics().stringWidth(currentTime.format(DateTimeFormatter.ofPattern(timeFormat))); //表示時刻の文字列の幅を取得
-        int stringTimeHeight = g.getFontMetrics().getHeight(); //表示時刻の文字列の高さを取得
-        g.setColor(AppStyle.SUMI);
-        g.drawString(backgroundDate, FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
-        g.drawString(backgroundTime, FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
-        g.setColor(AppStyle.ROSSO_FIORENTINO);
-        g.drawString(currentTime.format(DateTimeFormatter.ofPattern(dateFormat)), FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
-        g.drawString(currentTime.format(DateTimeFormatter.ofPattern(timeFormat)), FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
+        buffer.setFont(font);
+        int stringDateWidth = buffer.getFontMetrics().stringWidth(currentTime.format(DateTimeFormatter.ofPattern(dateFormat))); //表示日付の文字列の幅を取得
+        int stringDateHeight = buffer.getFontMetrics().getHeight(); //表示日付の文字列の高さを取得
+        int stringTimeWidth = buffer.getFontMetrics().stringWidth(currentTime.format(DateTimeFormatter.ofPattern(timeFormat))); //表示時刻の文字列の幅を取得
+        int stringTimeHeight = buffer.getFontMetrics().getHeight(); //表示時刻の文字列の高さを取得
+        buffer.setColor(AppStyle.SUMI);
+        buffer.drawString(backgroundDate, FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
+        buffer.drawString(backgroundTime, FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
+        buffer.setColor(AppStyle.ROSSO_FIORENTINO);
+        buffer.drawString(currentTime.format(DateTimeFormatter.ofPattern(dateFormat)), FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
+        buffer.drawString(currentTime.format(DateTimeFormatter.ofPattern(timeFormat)), FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
+        g.drawImage(bufferingImg, 0, 0, this);
     }
 }
