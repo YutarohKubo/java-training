@@ -79,7 +79,7 @@ public class MyClockFrame extends Frame {
         buffer.setColor(AppStyle.SUMI);
         buffer.drawString(backgroundDate, FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
         buffer.drawString(backgroundTime, FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
-        buffer.setColor(AppStyle.ROSSO_FIORENTINO);
+        buffer.setColor(AppStyle.VERT_PRAIRIE);
         buffer.drawString(currentTime.format(DateTimeFormatter.ofPattern(dateFormat)), FRAME_WIDTH/2 - stringDateWidth/2,  40 * FRAME_HEIGHT/100 - stringDateHeight/2);
         buffer.drawString(currentTime.format(DateTimeFormatter.ofPattern(timeFormat)), FRAME_WIDTH/2 - stringTimeWidth/2,  60 * FRAME_HEIGHT/100 - stringTimeHeight/2);
         g.drawImage(bufferingImg, 0, 0, this);

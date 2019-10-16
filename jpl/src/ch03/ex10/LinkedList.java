@@ -53,7 +53,9 @@ public class LinkedList implements Cloneable{
     @Override
     protected LinkedList clone() {
         try {
-            return (LinkedList) super.clone();
+            LinkedList list = (LinkedList) super.clone();
+            list.value = value;
+            return list;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e.toString());
         }

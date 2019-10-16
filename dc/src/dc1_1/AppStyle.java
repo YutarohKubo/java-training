@@ -8,4 +8,5 @@ public class AppStyle {
     public static final Color ALBATRE = new Color(234, 232, 242);
     public static final Color SUMI = new Color(52, 52, 52);
     public static final Color ANKOKUSHOKU = new Color(0, 1, 19);
+    public static final Color VERT_PRAIRIE = new Color(127, 176, 0);
 }
