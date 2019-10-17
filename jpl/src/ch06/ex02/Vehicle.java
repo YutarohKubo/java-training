@@ -42,9 +42,20 @@ public class Vehicle {
         direction %= 360;
     }
 
-    public void turn (int angle) {
-        direction += angle;
-        direction %= 360;
+    public void turn(TurnDirection direction) {
+        switch (direction) {
+            case LEFT:
+                this.direction += 90;
+                break;
+
+            case RIGHT:
+                this.direction += 270;
+                break;
+
+            default:
+                return;
+        }
+        this.direction %= 360;
     }
 
     public void setDirection(double direction) {

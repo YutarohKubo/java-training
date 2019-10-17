@@ -41,12 +41,14 @@ public class Vehicle {
         currentSpeed = 0;
     }
 
-    public final void turn(double angle) {
-
+    public void turn(double angle) {
+        direction += angle;
+        direction %= 360;
     }
 
-    public final void turn (int angle) {
-
+    public void turn (int angle) {
+        direction += angle;
+        direction %= 360;
     }
 
     public void setDirection(double direction) {

@@ -1,7 +1,5 @@
 package ch02.ex17;
 
-import ch06.ex02.TurnDirection;
-
 import java.util.Random;
 
 public class Vehicle {
@@ -44,20 +42,9 @@ public class Vehicle {
         direction %= 360;
     }
 
-    public void turn(TurnDirection direction) {
-        switch (direction) {
-            case LEFT:
-                this.direction += 90;
-                break;
-
-            case RIGHT:
-                this.direction += 270;
-                break;
-
-            default:
-                return;
-        }
-        this.direction %= 360;
+    public void turn (int angle) {
+        direction += angle;
+        direction %= 360;
     }
 
     public void setDirection(double direction) {
