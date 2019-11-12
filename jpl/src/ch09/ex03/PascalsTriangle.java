@@ -1,4 +1,4 @@
-package ch07.ex03;
+package ch09.ex03;
 
 public class PascalsTriangle {
 
