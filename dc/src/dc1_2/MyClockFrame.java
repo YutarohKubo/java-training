@@ -139,7 +139,7 @@ public class MyClockFrame extends Frame {
                 //System.out.println("Font size " + mProperty.getTimeFontSize());
                 repaint();
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
