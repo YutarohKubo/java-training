@@ -1,0 +1,14 @@
+・PassengerVehicleオブジェクトの定員を負の値に設定しようとした
+->java.lang.IllegalArgumentException
+・オブジェクトがその初期値を設定するのに使用する設定ファイルに文法エラーが見つかった
+->java.io.IOException
+・プログラマが指定した単語を文字列の配列から検索するメソッドが、その単語を発見できない。
+->java.lang.IllegalArgumentException
+・openメソッドへ指定されたファイルが存在しない。
+->java.io.FileNotFoundException
+・openメソッドへ指定されたファイルは存在するが、セキュリティにより使用できない
+->java.security.AccessControlException
+・リモートのサーバプロセスにネットワークコネクションを確立しようとするが、リモートのマシンと接続できない。
+->java.rmi.ConnectException
+・リモートのサーバプロセスとのやり取りの最中に、ネットワークコネクションが切れる
+->java.rmi.RemoteException
