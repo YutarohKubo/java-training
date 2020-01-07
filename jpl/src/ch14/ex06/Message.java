@@ -8,16 +8,15 @@ public class Message {
         this.everySecond = everySecond;
     }
 
-    public void displayMessage(String msg, long secondFromLaunch) {
-        synchronized (DisplayTime.lock) {
-            if (secondFromLaunch % everySecond == 0) {
-                System.out.println(msg);
-            }
-            try {
-                DisplayTime.lock.wait(1000000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    synchronized public void displayMessage(String msg) {
+        //if (secondFromLaunch % everySecond == 0) {
+        System.out.println(msg);
+        //}
+        System.out.println("run message " + everySecond + " sec");
+        try {
+            wait(1000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
