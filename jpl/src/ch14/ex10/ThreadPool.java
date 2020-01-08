@@ -30,6 +30,7 @@ public class ThreadPool {
     private int queueSize;
     private int numberOfThreads;
     private ArrayDeque<Thread> threads;
+    private boolean[] fragStart;
 
     /**
      * Constructs ThreadPool.
@@ -47,9 +48,11 @@ public class ThreadPool {
         this.queueSize = queueSize;
         this.numberOfThreads = numberOfThreads;
         threads = new ArrayDeque<>(queueSize);
+        fragStart = new boolean[numberOfThreads];
         for (int i = 0; i < numberOfThreads; i++) {
+            int finalI = i;
             threads.add(new Thread(() -> {
-                for (int j = 0; j < 10000; j++) {
+                while (fragStart[finalI]) {
 
                 }
             }));
@@ -81,7 +84,8 @@ public class ThreadPool {
      * @throws IllegalStateException if threads has not been started.
      */
     public void stop() {
-        for (Thread thread : threads) {
+        for (int i = 0; i < numberOfThreads; i++) {
+            Thread thread = threads.remove();
             if (thread == null) {
                 continue;
             }
@@ -89,6 +93,7 @@ public class ThreadPool {
                 throw new IllegalStateException();
             }
             try {
+                fragStart[i] = false;
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
