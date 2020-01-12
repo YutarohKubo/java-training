@@ -4,13 +4,11 @@
  */
 package ch14.ex10;
 
-import java.util.ArrayDeque;
-
 /**
  * Simple Thread Pool class.
  *
  * This class can be used to dispatch an Runnable object to
- * be exectued by a thread.<br><br>
+ * be executed by a thread.<br><br>
  *
  * [Instruction]
  * <ul>
@@ -29,8 +27,9 @@ public class ThreadPool {
 
     private int queueSize;
     private int numberOfThreads;
-    private ArrayDeque<Thread> threads;
-    private boolean[] fragStart;
+    private Thread[] threads;
+    private volatile boolean[] fragStart;
+    private Runnable[] runnables;
 
     /**
      * Constructs ThreadPool.
@@ -47,15 +46,18 @@ public class ThreadPool {
         }
         this.queueSize = queueSize;
         this.numberOfThreads = numberOfThreads;
-        threads = new ArrayDeque<>(queueSize);
-        fragStart = new boolean[numberOfThreads];
+        threads = new Thread[queueSize];
+        runnables = new Runnable[queueSize];
+        this.fragStart = new boolean[numberOfThreads];
         for (int i = 0; i < numberOfThreads; i++) {
             int finalI = i;
-            threads.add(new Thread(() -> {
+            threads[i] = new Thread(() -> {
                 while (fragStart[finalI]) {
-
+                    if (runnables[finalI] != null) {
+                        runnables[finalI].run();
+                    }
                 }
-            }));
+            });
         }
     }
 
@@ -64,15 +66,16 @@ public class ThreadPool {
      *
      * @throws IllegalStateException if threads has been already started.
      */
-    public void start() {
-        for (Thread thread : threads) {
-            if (thread == null) {
+    synchronized public void start() {
+        for (int i = 0; i < numberOfThreads; i++) {
+            if (threads[i] == null) {
                 continue;
             }
-            if (thread.isAlive()) {
+            if (threads[i].isAlive()) {
                 throw new IllegalStateException();
             }
-            thread.start();
+            fragStart[i] = true;
+            threads[i].start();
         }
     }
 
@@ -83,9 +86,9 @@ public class ThreadPool {
      *
      * @throws IllegalStateException if threads has not been started.
      */
-    public void stop() {
+    synchronized public void stop() {
         for (int i = 0; i < numberOfThreads; i++) {
-            Thread thread = threads.remove();
+            Thread thread = threads[i];
             if (thread == null) {
                 continue;
             }
@@ -94,6 +97,7 @@ public class ThreadPool {
             }
             try {
                 fragStart[i] = false;
+
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -111,7 +115,18 @@ public class ThreadPool {
      * @throws NullPointerException if runnable is null.
      * @throws IllegalStateException if this pool has not been started yet.
      */
-    public void dispatch(Runnable runnable) {
-        throw new AssertionError("Not Implemented Yet");
+    synchronized public void dispatch(Runnable runnable) {
+        if (runnable == null) {
+            throw new NullPointerException();
+        }
+        if (!fragStart[0]) {
+            throw new IllegalStateException();
+        }
+        for (int i = 0; i < numberOfThreads; i++) {
+            if (this.runnables[i] == null) {
+                this.runnables[i] = runnable;
+                break;
+            }
+        }
     }
 }

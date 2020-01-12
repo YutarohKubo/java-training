@@ -90,7 +90,8 @@ public class ThreadPoolTest {
             Thread[] threads = new Thread[activeCount];
             tg.enumerate(threads);
             for (Thread t : threads) {
-                if ("ReaderThread".equals(t.getName())) {
+                System.out.println(t.getName());
+                if ("ReaderThread".equals(t.getName()) || "Monitor Ctrl-Break".equals(t.getName())) {
                     activeCount--;
                     break;
                 }
@@ -487,7 +488,7 @@ public class ThreadPoolTest {
                 }
 
                 // Excludes the ReaderThread of Eclipse.
-                if ("ReaderThread".equals(t.getName())) {
+                if ("ReaderThread".equals(t.getName()) || "Monitor Ctrl-Break".equals(t.getName())) {
                     continue;
                 }
 

@@ -3,6 +3,12 @@ package ch14.ex09;
 public class Main {
 
     public static void main(String[] args) {
+        ThreadGroup tg = Thread.currentThread().getThreadGroup();
+        Thread[] threads = new Thread[10];
+        tg.enumerate(threads);
+        for (Thread th : threads) {
+            System.out.println(th.getName());
+        }
         ThreadGroup groupParent = new ThreadGroup("parent");
         ThreadGroup groupChild1 = new ThreadGroup(groupParent, "child1");
         ThreadGroup groupChild2 = new ThreadGroup(groupParent, "child2");
@@ -42,6 +48,7 @@ public class Main {
         thread4.start();
         thread5.start();
         ThreadHierarchy th = new ThreadHierarchy();
+        th.startInspectThreadGroup(groupParent);
         th.startInspectThreadGroup(groupChild1);
         th.startInspectThreadGroup(groupChild2);
     }

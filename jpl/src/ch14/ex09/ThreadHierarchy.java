@@ -24,7 +24,8 @@ public class ThreadHierarchy {
 
     public void startInspectThreadGroup (ThreadGroup group) {
         Thread thread = new Thread(() -> {
-            while (true) {try {
+            while (true) {
+                try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

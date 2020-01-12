@@ -3,7 +3,6 @@ package ch14.ex06;
 public class DisplayTime {
 
     public static long secondFromLaunch;
-    public static final Object lock = new Object();
     private static final Message msg1 = new Message(15);
     private static final Message msg2 = new Message(7);
 
