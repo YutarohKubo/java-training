@@ -28,8 +28,11 @@ public class ThreadPool {
     private int queueSize;
     private int numberOfThreads;
     private Thread[] threads;
-    private volatile boolean[] fragStart;
+    private Thread[] threadsCache;
     private Runnable[] runnables;
+    private Runnable[] runnablesCache;
+    private volatile boolean[] fragStart;
+    private volatile Object[] locks;
 
     /**
      * Constructs ThreadPool.
@@ -49,12 +52,21 @@ public class ThreadPool {
         threads = new Thread[queueSize];
         runnables = new Runnable[queueSize];
         this.fragStart = new boolean[numberOfThreads];
+        this.locks = new Object[numberOfThreads];
         for (int i = 0; i < numberOfThreads; i++) {
+            locks[i] = new Object();
             int finalI = i;
             threads[i] = new Thread(() -> {
-                while (fragStart[finalI]) {
-                    if (runnables[finalI] != null) {
-                        runnables[finalI].run();
+                synchronized (locks[finalI]) {
+                    while (fragStart[finalI]) {
+                        try {
+                            locks[finalI].wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (runnables[finalI] != null) {
+                            runnables[finalI].run();
+                        }
                     }
                 }
             });
@@ -86,18 +98,21 @@ public class ThreadPool {
      *
      * @throws IllegalStateException if threads has not been started.
      */
-    synchronized public void stop() {
+    public void stop() {
         for (int i = 0; i < numberOfThreads; i++) {
             Thread thread = threads[i];
-            if (thread == null) {
-                continue;
-            }
-            if (!thread.isAlive()) {
-                throw new IllegalStateException();
+            synchronized (locks[i]) {
+                if (thread == null) {
+                    continue;
+                }
+                System.out.println("thread alive = " + thread.isAlive());
+                if (!fragStart[i]) {
+                    throw new IllegalStateException();
+                }
+                fragStart[i] = false;
+                locks[i].notifyAll();
             }
             try {
-                fragStart[i] = false;
-
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -125,8 +140,20 @@ public class ThreadPool {
         for (int i = 0; i < numberOfThreads; i++) {
             if (this.runnables[i] == null) {
                 this.runnables[i] = runnable;
-                break;
+                synchronized (locks[i]) {
+                    this.locks[i].notifyAll();
+                }
+                return;
             }
         }
+        /*for (int i = 0; i < numberOfThreads; i++) {
+            if (this.threads[i].getState() == Thread.State.WAITING) {
+                this.runnables[i] = runnable;
+                synchronized (locks[i]) {
+                    this.locks[i].notifyAll();
+                }
+                break;
+            }
+        }*/
     }
 }
