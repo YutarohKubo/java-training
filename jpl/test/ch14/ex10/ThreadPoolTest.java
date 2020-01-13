@@ -27,6 +27,7 @@ public class ThreadPoolTest {
         @Override
         public synchronized void run() {
             runCount++;
+            System.out.println("nowCount = " + runCount);
             notifyAll();
         }
 
@@ -66,6 +67,7 @@ public class ThreadPoolTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println("LatchTask is awake");
             }
         }
 
@@ -306,7 +308,7 @@ public class ThreadPoolTest {
         assertEquals(1, activeThreadCount());
     }
 
-    //@Test
+    @Test
     public void testComplexRepeatedDispatch() {
         ThreadPool tp = new ThreadPool(10, 10);
         tp.start();
@@ -321,7 +323,7 @@ public class ThreadPoolTest {
         assertEquals(1, activeThreadCount());
     }
 
-    //@Test
+    @Test
     public void testComplexRepeatedDispatch2() {
         ThreadPool tp = new ThreadPool(10, 10);
         tp.start();
@@ -344,7 +346,7 @@ public class ThreadPoolTest {
         assertEquals(1, activeThreadCount());
     }
 
-    //@Test
+    @Test
     public void testLatchSimpleDispatch() {
         final int numberOfThreads = 10;
         ThreadPool tp = new ThreadPool(10, numberOfThreads);
@@ -372,7 +374,7 @@ public class ThreadPoolTest {
         assertEquals(1, activeThreadCount());
     }
 
-    //@Test
+    @Test
     public void testLatchComplexDispatch() {
         final int numberOfThreads = 10;
         ThreadPool tp = new ThreadPool(10, numberOfThreads);

@@ -42,7 +42,7 @@ public class DisplayTime {
             }
         }
         synchronized (msg2) {
-            if (secondFromLaunch % 5 == 0) {
+            if (secondFromLaunch % 7 == 0) {
                 msg2.notify();
             }
         }
