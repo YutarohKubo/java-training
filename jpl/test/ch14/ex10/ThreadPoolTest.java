@@ -417,15 +417,16 @@ public class ThreadPoolTest {
         final int numberOfThreads = 10;
         ThreadPool tp = new ThreadPool(10, numberOfThreads);
         tp.start();
-        for (int i = 0; i < numberOfThreads; i++) {
+        // Run more tasks than the requested number of threads.
+        for (int i = 0; i < numberOfThreads*2; i++) {
             tp.dispatch(task);
         }
 
         // By the specification, stop() will wait for the terminations of all threads.
         tp.stop();
-        for (Thread thread : threads) {
-            System.out.println(thread.getName());
-        }
+
+        // If threads are pooled as requested correctly, then
+        // threads.size() must be equal to numberOfThreads.
         assertEquals(numberOfThreads, threads.size());
         assertEquals(1, activeThreadCount());
     }
