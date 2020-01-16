@@ -20,24 +20,18 @@ public class PrintServer implements Runnable {
                 realPrint(requests.remove());
                 System.out.println("current thread is " + Thread.currentThread().getName());
             } else {
-                System.out.println("Booooo");
+                System.out.println("Invalid thread....");
+                break;
             }
         }
     }
 
     private void realPrint(PrintJob job) {
-
+        //実際のプリント処理を行う
+        System.out.println("印刷してます");
     }
 
     public static void main(String[] args) {
-        PrintServer printServer = new PrintServer();
-
-        //↓セキュリティホール
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                printServer.run();
-            }
-        }, "thread_print_process").start();*/
+        new PrintServer();
     }
 }

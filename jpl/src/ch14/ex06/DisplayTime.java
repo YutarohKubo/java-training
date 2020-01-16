@@ -18,9 +18,9 @@ public class DisplayTime {
             }
         });
         Thread displayTimeThread = new Thread(() -> {
-            DisplayTime displayTime = new DisplayTime();
+            DisplayTime time = new DisplayTime();
             while (true) {
-                displayTime.displayTime();
+                time.displayTime();
             }
         });
         messageBy15SecThread.start();
@@ -46,10 +46,6 @@ public class DisplayTime {
                 msg2.notify();
             }
         }
-    }
-
-    synchronized public static void displayMessage(String msg) {
-
     }
 
 }

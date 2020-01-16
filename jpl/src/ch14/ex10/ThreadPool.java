@@ -4,8 +4,6 @@
  */
 package ch14.ex10;
 
-import java.util.ArrayList;
-
 /**
  * Simple Thread Pool class.
  * <p>
@@ -30,13 +28,9 @@ public class ThreadPool {
     private int queueSize;
     private int numberOfThreads;
     private Thread[] threads;
-    private Thread[] threadsCache = new Thread[10000];
     private Runnable[] runnables;
-    private Runnable[] runnablesCache = new Runnable[10000];
     private volatile boolean[] fragStart;
-    private volatile boolean[] fragStartCache = new boolean[10000];
     private static Object[] locks;
-    private static Object[] locksCache = new Object[10000];
 
     /**
      * Constructs ThreadPool.
@@ -63,6 +57,7 @@ public class ThreadPool {
                 synchronized (locks[finalI]) {
                     while (fragStart[finalI]) {
                         if (runnables[finalI] != null) {
+                            System.out.println("Now Running");
                             runnables[finalI].run();
                         }
                         try {
@@ -108,7 +103,6 @@ public class ThreadPool {
                 if (thread == null) {
                     continue;
                 }
-                System.out.println("thread alive = " + thread.isAlive());
                 if (!fragStart[i]) {
                     throw new IllegalStateException();
                 }
@@ -119,23 +113,6 @@ public class ThreadPool {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-        }
-        if (threadsCache.length != 0) {
-            for (int i = 0; i < threadsCache.length; i++) {
-                Thread thread = threadsCache[i];
-                if (thread == null) {
-                    break;
-                }
-                synchronized (locksCache[i]) {
-                    fragStartCache[i] = false;
-                    locksCache[i].notifyAll();
-                }
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -162,58 +139,12 @@ public class ThreadPool {
             e.printStackTrace();
         }
         for (int i = 0; i < numberOfThreads; i++) {
-            /*if (this.runnables[i] == null) {
+            if ((this.runnables[i] == runnable && this.runnables[numberOfThreads-1] != null) || this.runnables[i] == null) {
                 this.runnables[i] = runnable;
                 synchronized (locks[i]) {
                     locks[i].notifyAll();
                 }
                 return;
-            }
-            else if (this.runnables[i] == runnable && this.runnables[numberOfThreads-1] != null) {
-                this.runnables[i] = runnable;
-                synchronized (locks[i]) {
-                    locks[i].notifyAll();
-                }
-                return;
-            }*/
-            if (this.runnables[i] == runnable && this.runnables[numberOfThreads-1] != null) {
-                this.runnables[i] = runnable;
-                synchronized (locks[i]) {
-                    locks[i].notifyAll();
-                }
-                return;
-            }
-            else if (this.runnables[i] == null) {
-                this.runnables[i] = runnable;
-                synchronized (locks[i]) {
-                    locks[i].notifyAll();
-                }
-                return;
-            } else if (this.runnables[i] != runnable && this.runnables[numberOfThreads-1] != null) {
-                for (int j = 0; j < 10000; j++) {
-                    if (runnablesCache[j] == null) {
-                        runnablesCache[j] = runnable;
-                        fragStartCache[j] = true;
-                        locksCache[j] = new Object();
-                        int finalJ = j;
-                        threadsCache[j] = new Thread(() -> {
-                            synchronized (locksCache[finalJ]) {
-                                while (fragStartCache[finalJ]) {
-                                    runnablesCache[finalJ].run();
-                                    try {
-                                        locksCache[finalJ].wait();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        });
-                        threadsCache[j].start();
-                        synchronized (locksCache[j]) {
-                            locksCache[j].notifyAll();
-                        }
-                    }
-                }
             }
         }
     }

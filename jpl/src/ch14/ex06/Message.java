@@ -12,9 +12,9 @@ public class Message {
         //if (secondFromLaunch % everySecond == 0) {
         System.out.println(msg);
         //}
-        System.out.println("run message " + everySecond + " sec");
+        System.out.println("run message every " + everySecond + " sec");
         try {
-            wait(1000000);
+            wait();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

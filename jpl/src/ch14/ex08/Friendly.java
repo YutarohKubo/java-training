@@ -2,6 +2,8 @@ package ch14.ex08;
 
 public class Friendly {
 
+    //デッドロック回避のための、ロックオブジェクト
+    private static final Object lock = new Object();
     private Friendly partner;
     private String name;
 
@@ -9,13 +11,19 @@ public class Friendly {
         this.name = name;
     }
 
-    synchronized public void hug () {
-        System.out.println(Thread.currentThread().getName() + " in " + name + ".hug trying to invoke " + partner.name + ".hugBack()");
-        partner.hugBack();
+    private void hug () {
+        //デッドロック回避のためhug, hugBackでは、共通のlockオブジェクトを用いる
+        synchronized (lock) {
+            System.out.println(Thread.currentThread().getName() + " in " + name + ".hug trying to invoke " + partner.name + ".hugBack()");
+            partner.hugBack();
+        }
     }
 
-    synchronized private void hugBack () {
-        System.out.println(Thread.currentThread().getName() + " in " + name + "hugBack()");
+    private void hugBack () {
+        //デッドロック回避のためhug, hugBackでは、共通のlockオブジェクトを用いる
+        synchronized (lock) {
+            System.out.println(Thread.currentThread().getName() + " in " + name + "hugBack()");
+        }
     }
 
     public void becomeFriend(Friendly partner) {
