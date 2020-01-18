@@ -368,7 +368,7 @@ public class ThreadPoolTest {
         tp.stop();
         assertEquals(1, activeThreadCount());
     }
-    
+
     public void testLatchComplexDispatch() {
         final int numberOfThreads = 10;
         ThreadPool tp = new ThreadPool(10, numberOfThreads);
