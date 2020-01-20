@@ -1,13 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SearchAreaPanel extends InterpretPanel {
 
-    JTextField textSearchField;
-    JButton buttonSearch;
+    private DeclaredMemberListPanel declaredMemberListPanel;
 
-    public SearchAreaPanel() {
+    private JTextField textSearchField;
+    private JButton buttonSearch;
+
+    public SearchAreaPanel(DeclaredMemberListPanel declaredMemberListPanel) {
         this.setBackground(AppStyle.INDIGO);
+        this.declaredMemberListPanel = declaredMemberListPanel;
     }
 
     @Override
@@ -26,8 +31,15 @@ public class SearchAreaPanel extends InterpretPanel {
         textSearchField.setFont(textSearchFieldFont);
         textSearchField.setSize(new Dimension(500, 10));
         buttonSearch = new JButton("検索");
+        buttonSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                declaredMemberListPanel.setupJListMember(textSearchField.getText());
+            }
+        });
         this.add(textSearchLabel);
         this.add(textSearchField);
+        this.add(buttonSearch);
     }
 
 }
