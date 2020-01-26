@@ -5,13 +5,15 @@ public class Main {
     public static void main(String[] args) {
         AppFrame frame = new AppFrame("Interpret");
 
+        //メンバ操作部分
+        ControlMemberPanel controlMemberPanel = new ControlMemberPanel();
         //操作ボタン配置部分
-        OperationAreaPanel operationAreaPanel = new OperationAreaPanel();
+        OperationAreaPanel operationAreaPanel = new OperationAreaPanel(controlMemberPanel);
         //MainArea&Console部分
         CenterPanel centerPanel = new CenterPanel();
         MainAreaPanel mainAreaPanel = new MainAreaPanel();
         ConsoleAreaPanel consoleAreaPanel = new ConsoleAreaPanel();
-        DeclaredMemberListPanel declaredMemberListPanel = new DeclaredMemberListPanel();
+        DeclaredMemberListPanel declaredMemberListPanel = new DeclaredMemberListPanel(controlMemberPanel);
         mainAreaPanel.add(declaredMemberListPanel);
         centerPanel.add(mainAreaPanel, BorderLayout.CENTER);
         centerPanel.add(consoleAreaPanel, BorderLayout.SOUTH);
