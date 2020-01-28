@@ -6,7 +6,7 @@ public class Main {
         AppFrame frame = new AppFrame("Interpret");
 
         //メンバ操作部分
-        ControlMemberPanel controlMemberPanel = new ControlMemberPanel();
+        ControlMemberPanel controlMemberPanel = new ControlMemberPanel(frame);
         //操作ボタン配置部分
         OperationAreaPanel operationAreaPanel = new OperationAreaPanel(controlMemberPanel);
         //MainArea&Console部分
