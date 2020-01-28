@@ -2,22 +2,15 @@ import java.lang.reflect.Member;
 
 public class MemberData {
 
-    public enum  Type {
-        CONSTRUCTOR,
-        FIELD,
-        METHOD,
-        CLASS,
-    }
-
-    private Type memberType;
+    private MemberType memberType;
     private Member member;
 
-    public MemberData(Type memberType, Member member) {
+    public MemberData(MemberType memberType, Member member) {
         this.memberType = memberType;
         this.member = member;
     }
 
-    public Type getMemberType() {
+    public MemberType getMemberType() {
         return memberType;
     }
 

@@ -1,11 +1,18 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.lang.reflect.*;
 
 public class ControlMemberPanel extends InterpretPanel {
 
+    public static final String TAG_FIELD_SHOW = "field_panel";
+    public static final String TAG_METHOD_SHOW = "method_panel";
+    public static final String TAG_CONSTRUCTOR_SHOW = "constructor_panel";
+
+    private CardLayout layout;
     private AppFrame appFrame;
+    private ControlFieldPanel fieldPanel;
+    private ControlMethodPanel methodPanel;
+    private ControlConstructorPanel constructorPanel;
     private PanelInputText inputToMemberPanel;
     private JPanel executeButtonPanel;
     private JButton executeChangeValueButton;
@@ -20,25 +27,23 @@ public class ControlMemberPanel extends InterpretPanel {
     Method targetMethod;
     Field targetField;
 
-    public enum Mode {
-        FIELD,
-        METHOD,
-        CONSTRUCTOR,
-    }
-
-    public ControlMemberPanel(AppFrame appFrame) {
+    public ControlMemberPanel(AppFrame appFrame, ControlFieldPanel fieldPanel, ControlMethodPanel methodPanel, ControlConstructorPanel constructorPanel) {
         this.appFrame = appFrame;
+        this.fieldPanel = fieldPanel;
+        this.methodPanel = methodPanel;
+        this.constructorPanel = constructorPanel;
         addComponent();
     }
 
     @Override
     void setPanelLayout() {
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.layout = new CardLayout();
+        setLayout(layout);
     }
 
     @Override
     void setupComponent() {
-        inputToMemberPanel = new PanelInputText("");
+        /*inputToMemberPanel = new PanelInputText("");
         initExecuteButtonPanel();
         executeChangeValueButton = new JButton("実行");
         executeChangeValueButton.setAlignmentX(0.5f);
@@ -47,7 +52,7 @@ public class ControlMemberPanel extends InterpretPanel {
             public void actionPerformed(ActionEvent e) {
 
             }
-        });
+        });*/
         /*executeMethodButton = new JButton("実行");
         executeMethodButton.setAlignmentX(0.5f);
         executeMethodButton.addActionListener(new ActionListener() {
@@ -106,21 +111,17 @@ public class ControlMemberPanel extends InterpretPanel {
     }
 
     private void addComponent() {
-        setComponentMode(Mode.FIELD);
+        this.add(fieldPanel, TAG_FIELD_SHOW);
+        this.add(methodPanel, TAG_METHOD_SHOW);
+        this.add(constructorPanel, TAG_CONSTRUCTOR_SHOW);
+        setComponentMode(MemberType.FIELD);
     }
 
-    private void initExecuteButtonPanel() {
-        executeButtonPanel = new JPanel();
-        executeButtonPanel.setLayout(new BoxLayout(executeButtonPanel, BoxLayout.PAGE_AXIS));
-        executeButton = new JButton("実行");
-    }
-
-    public void setComponentMode(Mode mode) {
-        this.remove(executeButtonPanel);
-        initExecuteButtonPanel();
-        switch (mode) {
+    public void setComponentMode(MemberType type) {
+        switch (type) {
             case FIELD:
-                executeChangeValueButton = new JButton("変更");
+                layout.show(this, TAG_FIELD_SHOW);
+                /*executeChangeValueButton = new JButton("変更");
                 executeChangeValueButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -138,10 +139,12 @@ public class ControlMemberPanel extends InterpretPanel {
                 executeButtonPanel.add(executeChangeValueButton);
                 executeButtonPanel.add(executeButton);
                 this.add(executeButtonPanel);
-                revalidate();
+                revalidate();*/
                 break;
             case METHOD:
-                if (targetMemberData.getMember() instanceof Method) {
+                layout.show(this, TAG_METHOD_SHOW);
+                methodPanel.setMethodDataComponent();
+                /*if (targetMemberData.getMember() instanceof Method) {
                     Method targetMethod = (Method) targetMemberData.getMember();
                     Type[] argTypes = targetMethod.getGenericParameterTypes();
                     methodArgmentButtons = new JButton[argTypes.length];
@@ -179,10 +182,12 @@ public class ControlMemberPanel extends InterpretPanel {
                 executeButton.setAlignmentX(0.5f);
                 executeButtonPanel.add(executeButton);
                 this.add(executeButtonPanel);
-                revalidate();
+                revalidate();*/
                 break;
             case CONSTRUCTOR:
-                if (targetMemberData.getMember() instanceof Constructor) {
+                layout.show(this, TAG_CONSTRUCTOR_SHOW);
+                constructorPanel.setConstructorDataComponent();
+                /*if (targetMemberData.getMember() instanceof Constructor) {
                     Constructor targetConstructor = (Constructor) targetMemberData.getMember();
                     Type[] argTypes = targetConstructor.getGenericParameterTypes();
                     constructorArgmentButtons = new JButton[argTypes.length];
@@ -227,13 +232,24 @@ public class ControlMemberPanel extends InterpretPanel {
                 executeButtonPanel.add(executeButton);
                 this.add(executeButtonPanel);
                 revalidate();
-                break;
+                break;*/
             default:
-                throw new IllegalArgumentException();
+                //throw new IllegalArgumentException();
         }
     }
 
-    public void setTargetMemberData(MemberData targetMemberData) {
-        this.targetMemberData = targetMemberData;
+    public void setTargetMemberData(MemberData targetMemberData, MemberType type) {
+        switch (type) {
+            case FIELD:
+                fieldPanel.setTargetFieldData(targetMemberData);
+                break;
+            case METHOD:
+                methodPanel.setTargetMethodData(targetMemberData);
+                break;
+            case CONSTRUCTOR:
+                constructorPanel.setTargetConstructorData(targetMemberData);
+                break;
+            default:
+        }
     }
 }

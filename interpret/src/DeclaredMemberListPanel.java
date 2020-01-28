@@ -41,9 +41,9 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         try {
             Class<?> targetClazz = Class.forName(packageAndClassName);
             while (targetClazz != null) {
-                setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberData.Type.CONSTRUCTOR);
-                setListMemberToMember(targetClazz.getDeclaredFields(), MemberData.Type.FIELD);
-                setListMemberToMember(targetClazz.getDeclaredMethods(), MemberData.Type.METHOD);
+                setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR);
+                setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
+                setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD);
                 targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
             }
         } catch (ClassNotFoundException e) {
@@ -51,7 +51,7 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         }
     }
 
-    private void setListMemberToMember(Member[] members, MemberData.Type type) {
+    private void setListMemberToMember(Member[] members, MemberType type) {
         for (Member m : members) {
             MemberData memberData = new MemberData(type, m);
             listMember.add(memberData);
@@ -75,19 +75,8 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
             itemPanel.setOpaque(true);
             itemPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
             itemPanel.setBackground(Color.YELLOW);
-            controlMemberPanel.setTargetMemberData(value);
-            switch (value.getMemberType()) {
-                case FIELD:
-                    controlMemberPanel.setComponentMode(ControlMemberPanel.Mode.FIELD);
-                    break;
-                case METHOD:
-                    controlMemberPanel.setComponentMode(ControlMemberPanel.Mode.METHOD);
-                    break;
-                case CONSTRUCTOR:
-                    controlMemberPanel.setComponentMode(ControlMemberPanel.Mode.CONSTRUCTOR);
-                    break;
-                default:
-            }
+            controlMemberPanel.setTargetMemberData(value, value.getMemberType());
+            controlMemberPanel.setComponentMode(value.getMemberType());
         }
 
         return itemPanel;

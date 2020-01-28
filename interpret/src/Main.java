@@ -5,8 +5,11 @@ public class Main {
     public static void main(String[] args) {
         AppFrame frame = new AppFrame("Interpret");
 
+        ControlFieldPanel fieldPanel = new ControlFieldPanel();
+        ControlMethodPanel methodPanel = new ControlMethodPanel();
+        ControlConstructorPanel constructorPanel = new ControlConstructorPanel();
         //メンバ操作部分
-        ControlMemberPanel controlMemberPanel = new ControlMemberPanel(frame);
+        ControlMemberPanel controlMemberPanel = new ControlMemberPanel(frame, fieldPanel, methodPanel, constructorPanel);
         //操作ボタン配置部分
         OperationAreaPanel operationAreaPanel = new OperationAreaPanel(controlMemberPanel);
         //MainArea&Console部分
