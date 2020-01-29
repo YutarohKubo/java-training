@@ -3,6 +3,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
@@ -31,6 +33,12 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         jListMember = new JList<>(model);
         jListMember.setBackground(AppStyle.SUNAIRO);
         jListMember.setCellRenderer(this);
+        jListMember.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                //Todo 設定した値のリセット動作処理を書く
+            }
+        });
         JScrollPane sp = new JScrollPane();
         sp.getViewport().setView(jListMember);
         sp.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));

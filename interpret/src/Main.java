@@ -6,8 +6,8 @@ public class Main {
         AppFrame frame = new AppFrame("Interpret");
 
         ControlFieldPanel fieldPanel = new ControlFieldPanel();
-        ControlMethodPanel methodPanel = new ControlMethodPanel();
-        ControlConstructorPanel constructorPanel = new ControlConstructorPanel();
+        ControlMethodPanel methodPanel = new ControlMethodPanel(frame);
+        ControlConstructorPanel constructorPanel = new ControlConstructorPanel(frame);
         //メンバ操作部分
         ControlMemberPanel controlMemberPanel = new ControlMemberPanel(frame, fieldPanel, methodPanel, constructorPanel);
         //操作ボタン配置部分

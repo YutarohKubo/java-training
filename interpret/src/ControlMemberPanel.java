@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 
 public class ControlMemberPanel extends InterpretPanel {
 
+    public static final String TAG_DUMMY_SHOW = "dummy_panel";
     public static final String TAG_FIELD_SHOW = "field_panel";
     public static final String TAG_METHOD_SHOW = "method_panel";
     public static final String TAG_CONSTRUCTOR_SHOW = "constructor_panel";
@@ -111,6 +112,7 @@ public class ControlMemberPanel extends InterpretPanel {
     }
 
     private void addComponent() {
+        this.add(new JPanel(), TAG_DUMMY_SHOW);
         this.add(fieldPanel, TAG_FIELD_SHOW);
         this.add(methodPanel, TAG_METHOD_SHOW);
         this.add(constructorPanel, TAG_CONSTRUCTOR_SHOW);
@@ -120,6 +122,7 @@ public class ControlMemberPanel extends InterpretPanel {
     public void setComponentMode(MemberType type) {
         switch (type) {
             case FIELD:
+                layout.show(this, TAG_DUMMY_SHOW);
                 layout.show(this, TAG_FIELD_SHOW);
                 /*executeChangeValueButton = new JButton("変更");
                 executeChangeValueButton.addActionListener(new ActionListener() {
@@ -142,6 +145,7 @@ public class ControlMemberPanel extends InterpretPanel {
                 revalidate();*/
                 break;
             case METHOD:
+                layout.show(this, TAG_DUMMY_SHOW);
                 layout.show(this, TAG_METHOD_SHOW);
                 methodPanel.setMethodDataComponent();
                 /*if (targetMemberData.getMember() instanceof Method) {
@@ -185,6 +189,7 @@ public class ControlMemberPanel extends InterpretPanel {
                 revalidate();*/
                 break;
             case CONSTRUCTOR:
+                layout.show(this, TAG_DUMMY_SHOW);
                 layout.show(this, TAG_CONSTRUCTOR_SHOW);
                 constructorPanel.setConstructorDataComponent();
                 /*if (targetMemberData.getMember() instanceof Constructor) {

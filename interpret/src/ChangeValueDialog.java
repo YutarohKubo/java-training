@@ -10,14 +10,14 @@ public class ChangeValueDialog extends JDialog {
     public static final int DIALOG_HEIGHT = 540;
 
     java.lang.reflect.Type memberType;
-    Object[] args;
+    InterpretPanel panel;
     int changeIndex;
     JButton executeButton;
 
-    public ChangeValueDialog(Frame frame, java.lang.reflect.Type type, Object[] args, int changeIndex) {
+    public ChangeValueDialog(Frame frame, InterpretPanel panel, java.lang.reflect.Type type, int changeIndex) {
         super(frame, true);
+        this.panel = panel;
         this.memberType = type;
-        this.args = args;
         this.changeIndex = changeIndex;
         init();
     }
@@ -25,33 +25,39 @@ public class ChangeValueDialog extends JDialog {
     private void init() {
         setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
         setLayout(new BorderLayout());
+        PanelInputText valueChangePanel = new PanelInputText("値");
+        executeButton = new JButton("実行");
         switch (memberType.getTypeName()) {
             case "java.lang.String":
-                PanelInputText valueChangePanelString = new PanelInputText("値");
-                executeButton = new JButton("実行");
                 executeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        args[changeIndex] = valueChangePanelString.getText();
+                        if (panel instanceof ControlConstructorPanel) {
+                            ControlConstructorPanel.DataHolder.args[changeIndex] = valueChangePanel.getText();
+                        } else if (panel instanceof ControlMethodPanel) {
+                            ControlMethodPanel.DataHolder.args[changeIndex] = valueChangePanel.getText();
+                        } else if (panel instanceof ControlFieldPanel) {
+
+                        }
                         setVisible(false);
                     }
                 });
-                add(valueChangePanelString, BorderLayout.CENTER);
-                add(executeButton, BorderLayout.SOUTH);
                 break;
             case "boolean":
             case "java.lang.Boolean":
-                PanelInputText valueChangePanelBoolean = new PanelInputText("値");
-                executeButton = new JButton("実行");
                 executeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        args[changeIndex] = Boolean.parseBoolean(valueChangePanelBoolean.getText());
+                        if (panel instanceof ControlConstructorPanel) {
+                            ControlConstructorPanel.DataHolder.args[changeIndex] = Boolean.parseBoolean(valueChangePanel.getText());
+                        } else if (panel instanceof ControlMethodPanel) {
+                            ControlMethodPanel.DataHolder.args[changeIndex] = Boolean.parseBoolean(valueChangePanel.getText());
+                        } else if (panel instanceof ControlFieldPanel) {
+
+                        }
                         setVisible(false);
                     }
                 });
-                add(valueChangePanelBoolean, BorderLayout.CENTER);
-                add(executeButton, BorderLayout.SOUTH);
                 break;
             case "char":
             case "java.lang.Character":
@@ -61,26 +67,43 @@ public class ChangeValueDialog extends JDialog {
             case "java.lang.Short":
             case "int":
             case "java.lang.Integer":
+                executeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (panel instanceof ControlConstructorPanel) {
+                            ControlConstructorPanel.DataHolder.args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
+                        } else if (panel instanceof ControlMethodPanel) {
+                            ControlMethodPanel.DataHolder.args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
+                        } else if (panel instanceof ControlFieldPanel) {
+
+                        }
+                        setVisible(false);
+                    }
+                });
             case "long":
             case "java.lang.Long":
             case "float":
             case "java.lang.Float":
             case "double":
             case "java.lang.Double":
-                PanelInputText valueChangePanel = new PanelInputText("値");
-                executeButton = new JButton("実行");
                 executeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if (panel instanceof ControlConstructorPanel) {
+                            ControlConstructorPanel.DataHolder.args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
+                        } else if (panel instanceof ControlMethodPanel) {
+                            ControlMethodPanel.DataHolder.args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
+                        } else if (panel instanceof ControlFieldPanel) {
 
+                        }
                         setVisible(false);
                     }
                 });
-                add(valueChangePanel, BorderLayout.CENTER);
-                add(executeButton, BorderLayout.SOUTH);
                 break;
             default:
         }
+        add(valueChangePanel, BorderLayout.CENTER);
+        add(executeButton, BorderLayout.SOUTH);
     }
 
     @Override

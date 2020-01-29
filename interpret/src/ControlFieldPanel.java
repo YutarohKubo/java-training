@@ -11,7 +11,7 @@ public class ControlFieldPanel extends InterpretPanel {
     private DataHolder dataHolder;
 
     public static class DataHolder {
-        Object value;
+        public static Object value;
     }
 
     public ControlFieldPanel () {
