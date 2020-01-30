@@ -37,7 +37,7 @@ public class ChangeValueDialog extends JDialog {
                         } else if (panel instanceof ControlMethodPanel) {
                             ControlMethodPanel.DataHolder.args[changeIndex] = valueChangePanel.getText();
                         } else if (panel instanceof ControlFieldPanel) {
-
+                            ControlFieldPanel.DataHolder.value = valueChangePanel.getText();
                         }
                         setVisible(false);
                     }
@@ -53,7 +53,7 @@ public class ChangeValueDialog extends JDialog {
                         } else if (panel instanceof ControlMethodPanel) {
                             ControlMethodPanel.DataHolder.args[changeIndex] = Boolean.parseBoolean(valueChangePanel.getText());
                         } else if (panel instanceof ControlFieldPanel) {
-
+                            ControlFieldPanel.DataHolder.value = Boolean.parseBoolean(valueChangePanel.getText());
                         }
                         setVisible(false);
                     }
@@ -75,7 +75,7 @@ public class ChangeValueDialog extends JDialog {
                         } else if (panel instanceof ControlMethodPanel) {
                             ControlMethodPanel.DataHolder.args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
                         } else if (panel instanceof ControlFieldPanel) {
-
+                            ControlFieldPanel.DataHolder.value = Integer.parseInt(valueChangePanel.getText());
                         }
                         setVisible(false);
                     }
@@ -94,7 +94,7 @@ public class ChangeValueDialog extends JDialog {
                         } else if (panel instanceof ControlMethodPanel) {
                             ControlMethodPanel.DataHolder.args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
                         } else if (panel instanceof ControlFieldPanel) {
-
+                            ControlFieldPanel.DataHolder.value = Double.parseDouble(valueChangePanel.getText());
                         }
                         setVisible(false);
                     }

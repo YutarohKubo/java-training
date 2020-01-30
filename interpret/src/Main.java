@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         AppFrame frame = new AppFrame("Interpret");
 
-        ControlFieldPanel fieldPanel = new ControlFieldPanel();
+        ControlFieldPanel fieldPanel = new ControlFieldPanel(frame);
         ControlMethodPanel methodPanel = new ControlMethodPanel(frame);
         ControlConstructorPanel constructorPanel = new ControlConstructorPanel(frame);
         //メンバ操作部分

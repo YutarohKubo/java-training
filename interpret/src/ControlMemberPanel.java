@@ -116,7 +116,7 @@ public class ControlMemberPanel extends InterpretPanel {
         this.add(fieldPanel, TAG_FIELD_SHOW);
         this.add(methodPanel, TAG_METHOD_SHOW);
         this.add(constructorPanel, TAG_CONSTRUCTOR_SHOW);
-        setComponentMode(MemberType.FIELD);
+        //setComponentMode(MemberType.FIELD);
     }
 
     public void setComponentMode(MemberType type) {
@@ -124,6 +124,7 @@ public class ControlMemberPanel extends InterpretPanel {
             case FIELD:
                 layout.show(this, TAG_DUMMY_SHOW);
                 layout.show(this, TAG_FIELD_SHOW);
+                fieldPanel.setFieldDataComponent();
                 /*executeChangeValueButton = new JButton("変更");
                 executeChangeValueButton.addActionListener(new ActionListener() {
                     @Override
