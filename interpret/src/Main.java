@@ -5,19 +5,19 @@ public class Main {
     public static void main(String[] args) {
         AppFrame frame = new AppFrame("Interpret");
 
-        ControlFieldPanel fieldPanel = new ControlFieldPanel(frame);
-        ControlMethodPanel methodPanel = new ControlMethodPanel(frame);
+        ConsoleAreaPanel consoleAreaPanel = new ConsoleAreaPanel();
         ControlConstructorPanel constructorPanel = new ControlConstructorPanel(frame);
+        ControlFieldPanel fieldPanel = new ControlFieldPanel(frame, constructorPanel);
+        ControlMethodPanel methodPanel = new ControlMethodPanel(frame, constructorPanel);
         //メンバ操作部分
-        ControlMemberPanel controlMemberPanel = new ControlMemberPanel(frame, fieldPanel, methodPanel, constructorPanel);
+        ControlMemberPanel controlMemberPanel = new ControlMemberPanel(fieldPanel, methodPanel, constructorPanel);
         //操作ボタン配置部分
         OperationAreaPanel operationAreaPanel = new OperationAreaPanel(controlMemberPanel);
         //MainArea&Console部分
         CenterPanel centerPanel = new CenterPanel();
         MainAreaPanel mainAreaPanel = new MainAreaPanel();
-        ConsoleAreaPanel consoleAreaPanel = new ConsoleAreaPanel();
         DeclaredMemberListPanel declaredMemberListPanel = new DeclaredMemberListPanel(controlMemberPanel);
-        mainAreaPanel.add(declaredMemberListPanel);
+        mainAreaPanel.add(declaredMemberListPanel, "declared_member_list_panel");
         centerPanel.add(mainAreaPanel, BorderLayout.CENTER);
         centerPanel.add(consoleAreaPanel, BorderLayout.SOUTH);
         //パッケージ+クラス名入力部分

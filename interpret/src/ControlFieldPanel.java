@@ -9,20 +9,33 @@ import java.lang.reflect.Type;
 public class ControlFieldPanel extends InterpretPanel {
 
     private AppFrame appFrame;
+    private Dialog parentDialog;
+    private ControlConstructorPanel controlConstructorPanel;
     private JPanel buttonPanel;
+    private JPanel checkContainValueInArgPanel;
     private JButton changeValueButton;
     private JButton executeButton;
+    private JLabel checkContainValueLabel;
     private MemberData targetFieldData;
 
     private DataHolder dataHolder;
 
-    public static class DataHolder {
-        public static Object value;
+    public class DataHolder {
+        public Object value;
     }
 
-    public ControlFieldPanel (AppFrame appFrame) {
+    public DataHolder getDataHolder() {
+        return dataHolder;
+    }
+
+    public ControlFieldPanel (AppFrame appFrame, ControlConstructorPanel controlConstructorPanel) {
         this.appFrame = appFrame;
+        this.controlConstructorPanel = controlConstructorPanel;
         //addComponent();
+    }
+
+    public ControlFieldPanel (Dialog parentDialog) {
+        this.parentDialog = parentDialog;
     }
 
     @Override
@@ -40,7 +53,7 @@ public class ControlFieldPanel extends InterpretPanel {
     private void initButtonPanel () {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        buttonPanel.setBackground(Color.BLUE);
+        buttonPanel.setBackground(AppStyle.LILAC);
     }
 
     private void addComponent() {
@@ -53,6 +66,10 @@ public class ControlFieldPanel extends InterpretPanel {
         this.dataHolder = new DataHolder();
     }
 
+    public void updateCheckContainValueLabel() {
+        checkContainValueLabel.setText(dataHolder.value == null ? "      " : "OK");
+    }
+
     public void setFieldDataComponent () {
         this.remove(buttonPanel);
         initButtonPanel();
@@ -61,40 +78,60 @@ public class ControlFieldPanel extends InterpretPanel {
         }
         Field targetField = (Field) targetFieldData.getMember();
         Type argType = targetField.getType();
-        changeValueButton = new JButton("値変更");
-        changeValueButton.setAlignmentX(0.5f);
-        changeValueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(argType.toString());
-                ChangeValueDialog dialog = new ChangeValueDialog(appFrame, ControlFieldPanel.this, argType, 0);
-                dialog.setVisible(true);
-            }
-        });
-        executeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!(targetFieldData.getMember() instanceof Field)) {
-                    return;
+        checkContainValueInArgPanel = new JPanel();
+        checkContainValueInArgPanel.setLayout(new BoxLayout(checkContainValueInArgPanel, BoxLayout.X_AXIS));
+        checkContainValueInArgPanel.setOpaque(false);
+        changeValueButton = new JButton("変更");
+        checkContainValueLabel = new JLabel();
+        checkContainValueLabel.setForeground(AppStyle.BLUE);
+        updateCheckContainValueLabel();
+        if (changeValueButton.getActionListeners().length == 0) {
+            changeValueButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println(argType.toString());
+                    ChangeValueDialog dialog = new ChangeValueDialog(appFrame, ControlFieldPanel.this, argType, 0);
+                    dialog.setVisible(true);
                 }
-                Field targetField = (Field) targetFieldData.getMember();
-                Field modifiersField = null;
-                try {
-                    modifiersField = Field.class.getDeclaredField("modifiers");
-                } catch (NoSuchFieldException ex) {
-                    ex.printStackTrace();
+            });
+        }
+        checkContainValueInArgPanel.add(changeValueButton);
+        checkContainValueInArgPanel.add(checkContainValueLabel);
+        if (executeButton.getActionListeners().length <= 0) {
+            executeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!(targetFieldData.getMember() instanceof Field)) {
+                        return;
+                    }
+                    Field targetField = (Field) targetFieldData.getMember();
+                    Field modifiersField = null;
+                    try {
+                        modifiersField = Field.class.getDeclaredField("modifiers");
+                    } catch (NoSuchFieldException ex) {
+                        ex.printStackTrace();
+                    }
+                    try {
+                        if (Modifier.isFinal(targetField.getModifiers())) {
+                            modifiersField.setAccessible(true);
+                            modifiersField.setInt(targetField,
+                                    targetField.getModifiers() & ~Modifier.PROTECTED & ~Modifier.PRIVATE & ~Modifier.FINAL);
+                        } else {
+                            targetField.setAccessible(true);
+                        }
+                        if (Modifier.isStatic(targetField.getModifiers())) {
+                            targetField.set(null, dataHolder.value);
+                        } else {
+                            targetField.set(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.value);
+                        }
+                        ConsoleAreaPanel.appendNewLog("Succeed in renewing field.(" + targetField.getName() + ")");
+                    } catch (IllegalAccessException ex) {
+                        ex.printStackTrace();
+                    }
                 }
-                modifiersField.setAccessible(true);
-                try {
-                    modifiersField.setInt(targetField,
-                            targetField.getModifiers() & ~Modifier.PRIVATE & ~Modifier.FINAL);
-                    targetField.set(ControlConstructorPanel.DataHolder.generatedObject, DataHolder.value);
-                } catch (IllegalAccessException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        buttonPanel.add(changeValueButton);
+            });
+        }
+        buttonPanel.add(checkContainValueInArgPanel);
         buttonPanel.add(executeButton);
         this.add(buttonPanel);
     }

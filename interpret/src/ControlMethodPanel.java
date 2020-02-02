@@ -9,19 +9,32 @@ import java.lang.reflect.Type;
 public class ControlMethodPanel extends InterpretPanel {
 
     private AppFrame appFrame;
+    private Dialog parentDialog;
+    private ControlConstructorPanel controlConstructorPanel;
     private JPanel buttonPanel;
+    private JPanel[] checkContainValueInArgPanel;
     private JButton[] methodArgumentButtons;
     private JButton executeButton;
+    private JLabel[] checkContainValueLabel;
     private MemberData targetMethodData;
 
     private DataHolder dataHolder;
 
-    public static class DataHolder {
-        public static Object[] args;
+    public class DataHolder {
+        public Object[] args;
     }
 
-    public ControlMethodPanel(AppFrame appFrame) {
+    public DataHolder getDataHolder() {
+        return dataHolder;
+    }
+
+    public ControlMethodPanel(AppFrame appFrame, ControlConstructorPanel controlConstructorPanel) {
         this.appFrame = appFrame;
+        this.controlConstructorPanel = controlConstructorPanel;
+    }
+
+    public ControlMethodPanel(Dialog parentDialog) {
+        this.parentDialog = parentDialog;
     }
 
     @Override
@@ -45,12 +58,16 @@ public class ControlMethodPanel extends InterpretPanel {
     private void initButtonPanel() {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        buttonPanel.setBackground(Color.RED);
+        buttonPanel.setBackground(AppStyle.CHERRY_BLOSSOMS);
     }
 
     public void setTargetMethodData(MemberData targetMethodData) {
         this.targetMethodData = targetMethodData;
         dataHolder = new DataHolder();
+    }
+
+    public void updateCheckContainValueLabel(int index) {
+        checkContainValueLabel[index].setText(dataHolder.args[index] == null ? "      " : "OK");
     }
 
     public void setMethodDataComponent() {
@@ -61,11 +78,18 @@ public class ControlMethodPanel extends InterpretPanel {
         }
         Method targetMethod = (Method) targetMethodData.getMember();
         Type[] argTypes = targetMethod.getGenericParameterTypes();
-        DataHolder.args = new Object[argTypes.length];
+        dataHolder.args = new Object[argTypes.length];
         methodArgumentButtons = new JButton[argTypes.length];
+        checkContainValueInArgPanel = new JPanel[argTypes.length];
+        checkContainValueLabel = new JLabel[argTypes.length];
         for (int i = 0; i < argTypes.length; i++) {
-            System.out.println(argTypes[i].toString());
+            checkContainValueInArgPanel[i] = new JPanel();
+            checkContainValueInArgPanel[i].setLayout(new BoxLayout(checkContainValueInArgPanel[i], BoxLayout.X_AXIS));
+            checkContainValueInArgPanel[i].setOpaque(false);
             methodArgumentButtons[i] = new JButton("引数" + (i + 1));
+            checkContainValueLabel[i] = new JLabel();
+            checkContainValueLabel[i].setForeground(AppStyle.BLUE);
+            updateCheckContainValueLabel(i);
             int finalI = i;
             methodArgumentButtons[i].addActionListener(new ActionListener() {
                 @Override
@@ -74,18 +98,20 @@ public class ControlMethodPanel extends InterpretPanel {
                     dialog.setVisible(true);
                 }
             });
-            buttonPanel.add(methodArgumentButtons[i]);
-            methodArgumentButtons[i].setAlignmentX(0.5f);
+            checkContainValueInArgPanel[i].add(methodArgumentButtons[i]);
+            checkContainValueInArgPanel[i].add(checkContainValueLabel[i]);
+            buttonPanel.add(checkContainValueInArgPanel[i]);
+        }
+        if (executeButton.getActionListeners().length >= 2) {
+            executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    for (int i = 0; i < DataHolder.args.length; i++) {
-                        System.out.println("targetMethod" + targetMethod.toString() + " " + i + " : " + DataHolder.args[i].toString() + " arg length = " + DataHolder.args.length);
-                    }
                     targetMethod.setAccessible(true);
-                    targetMethod.invoke(ControlConstructorPanel.DataHolder.generatedObject, DataHolder.args);
+                    targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
+                    ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                 } catch (InvocationTargetException ex) {

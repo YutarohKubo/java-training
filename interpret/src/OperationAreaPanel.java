@@ -15,7 +15,6 @@ public class OperationAreaPanel extends InterpretPanel {
     JButton buttonReset;
 
     public OperationAreaPanel (ControlMemberPanel controlMemberPanel) {
-        this.setBackground(AppStyle.CHERRY_BLOSSOMS);
         this.controlMemberPanel = controlMemberPanel;
         addComponent();
     }

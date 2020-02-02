@@ -10,7 +10,7 @@ import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeclaredMemberListPanel extends InterpretPanel implements ListCellRenderer<MemberData> {
+public class DeclaredMemberListDialogPanel extends InterpretPanel implements ListCellRenderer<MemberData> {
 
     private ControlMemberPanel controlMemberPanel;
     private JList<MemberData> jListMember;
@@ -18,7 +18,7 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
     private List<MemberData> listMember = new ArrayList<>();
     private boolean fragChangeItem = false;
 
-    public DeclaredMemberListPanel(ControlMemberPanel controlMemberPanel) {
+    public DeclaredMemberListDialogPanel(ControlMemberPanel controlMemberPanel) {
         this.controlMemberPanel = controlMemberPanel;
     }
 
@@ -48,7 +48,6 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
     }
 
     public void setupJListMember(String packageAndClassName) {
-        clearList();
         try {
             Class<?> targetClazz = Class.forName(packageAndClassName);
             while (targetClazz != null) {
@@ -59,15 +58,6 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void clearList() {
-        if (listMember != null) {
-            listMember.clear();
-        }
-        if (model != null) {
-            model.clear();
         }
     }
 

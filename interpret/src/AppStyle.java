@@ -15,7 +15,9 @@ public class AppStyle {
     public static final Color CANARIA = new Color(224, 234, 58);
     public static final Color PERSIMMON = new Color(255, 94, 25);
     public static final Color SUNAIRO = new Color(204, 195, 161);
-    public static final Color WHITE = Color.WHITE;
+    public static final Color WHITE = new Color(255, 255, 255);
+    public static final Color BLUE = new Color(0, 0, 255);
+    public static final Color YELLOW = new Color(255, 255, 0);
 
     public static final Font TIMES_ROMAN = new Font("SansSerif", Font.PLAIN, 18);
     public static final Font TIMES_ROMAN_LARGE = new Font("SansSerif", Font.PLAIN, 36);
