@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 public class ControlMethodPanel extends InterpretPanel {
@@ -33,8 +34,9 @@ public class ControlMethodPanel extends InterpretPanel {
         this.controlConstructorPanel = controlConstructorPanel;
     }
 
-    public ControlMethodPanel(Dialog parentDialog) {
+    public ControlMethodPanel(Dialog parentDialog,  ControlConstructorPanel controlConstructorPanel) {
         this.parentDialog = parentDialog;
+        this.controlConstructorPanel = controlConstructorPanel;
     }
 
     @Override
@@ -45,12 +47,6 @@ public class ControlMethodPanel extends InterpretPanel {
     @Override
     void setupComponent() {
         executeButton = new JButton("実行");
-        executeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         executeButton.setAlignmentX(0.5f);
         initButtonPanel();
     }
@@ -58,7 +54,7 @@ public class ControlMethodPanel extends InterpretPanel {
     private void initButtonPanel() {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        buttonPanel.setBackground(AppStyle.CHERRY_BLOSSOMS);
+        buttonPanel.setBackground(Color.PINK);
     }
 
     public void setTargetMethodData(MemberData targetMethodData) {
@@ -102,7 +98,7 @@ public class ControlMethodPanel extends InterpretPanel {
             checkContainValueInArgPanel[i].add(checkContainValueLabel[i]);
             buttonPanel.add(checkContainValueInArgPanel[i]);
         }
-        if (executeButton.getActionListeners().length >= 2) {
+        if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
         executeButton.addActionListener(new ActionListener() {
@@ -110,12 +106,27 @@ public class ControlMethodPanel extends InterpretPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     targetMethod.setAccessible(true);
-                    targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
+                    if (Modifier.isStatic(targetMethod.getModifiers())) {
+                        targetMethod.invoke(null, dataHolder.args);
+                    } else {
+                        targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
+                    }
                     ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
+                    ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
+                    ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException.");
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                    ConsoleAreaPanel.appendNewLog("Throw IllegalArgumentException.");
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
+                    ConsoleAreaPanel.appendNewLog("Throw NullPointerException.");
+                } catch (ExceptionInInitializerError er) {
+                    er.printStackTrace();
+                    ConsoleAreaPanel.appendNewLog("Throw ExceptionInInitializerError.");
                 }
             }
         });

@@ -44,12 +44,6 @@ public class ControlConstructorPanel extends InterpretPanel {
     @Override
     void setupComponent() {
         executeButton = new JButton("実行");
-        executeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         executeButton.setAlignmentX(0.5f);
         initButtonPanel();
     }
@@ -57,7 +51,7 @@ public class ControlConstructorPanel extends InterpretPanel {
     private void initButtonPanel() {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        buttonPanel.setBackground(AppStyle.CANARIA);
+        buttonPanel.setBackground(Color.ORANGE);
     }
 
     public void setTargetConstructorData(MemberData targetConstructorData) {
@@ -104,7 +98,7 @@ public class ControlConstructorPanel extends InterpretPanel {
             buttonPanel.add(checkContainValueInArgPanel[i]);
         }
         System.out.println("action listener length before = " + executeButton.getActionListeners().length);
-        if (executeButton.getActionListeners().length >= 2) {
+        if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
         executeButton.addActionListener(new ActionListener() {
@@ -114,10 +108,20 @@ public class ControlConstructorPanel extends InterpretPanel {
                     dataHolder.generatedObject = targetConstructor.newInstance(dataHolder.args);
                     ConsoleAreaPanel.appendNewLog("Succeed in Creating Object.(" + targetConstructor.getName() + ")");
                 } catch (InstantiationException ex) {
+                    //抽象クラスなど、インスタンス化しようとしたとき
+                    ConsoleAreaPanel.appendNewLog("Throw InstantiationException.");
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {
+                    //アクセスできないコンストラクタを呼び出そうとしたとき
+                    ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");
                     ex.printStackTrace();
                 } catch (InvocationTargetException ex) {
+                    //コンストラクタ自身が例外をThrowしたとき
+                    ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException.");
+                    ex.printStackTrace();
+                } catch (IllegalArgumentException ex) {
+                    //targetConstructorの引数と一致しないとき
+                    ConsoleAreaPanel.appendNewLog("Throw IllegalArgumentException.");
                     ex.printStackTrace();
                 }
             }

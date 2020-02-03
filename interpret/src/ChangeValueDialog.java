@@ -38,6 +38,7 @@ public class ChangeValueDialog extends JDialog {
     InterpretPanel panel;
     int changeIndex;
     JButton executeButton;
+    Frame frame;
 
     MainAreaDialogPanel mainAreaDialogPanel;
     DeclaredMemberListDialogPanel declaredMemberListDialogPanel;
@@ -63,9 +64,9 @@ public class ChangeValueDialog extends JDialog {
         setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
         setLayout(new BorderLayout());
         mainAreaDialogPanel = new MainAreaDialogPanel();
-        controlFieldPanel = new ControlFieldPanel(this);
-        controlMethodPanel = new ControlMethodPanel(this);
         controlConstructorPanel = new ControlConstructorPanel(this);
+        controlFieldPanel = new ControlFieldPanel(this, controlConstructorPanel);
+        controlMethodPanel = new ControlMethodPanel(this, controlConstructorPanel);
         controlMemberPanel = new ControlMemberPanel(controlFieldPanel, controlMethodPanel, controlConstructorPanel);
         declaredMemberListDialogPanel = new DeclaredMemberListDialogPanel(controlMemberPanel);
         declaredMemberListDialogPanel.setupJListMember(memberType.getTypeName());
@@ -80,6 +81,7 @@ public class ChangeValueDialog extends JDialog {
         setLayout(new BorderLayout());
         PanelInputText valueChangePanel = new PanelInputText("値");
         executeButton = new JButton("決定");
+        System.out.println("memberType = " + memberType.getTypeName());
         switch (memberType.getTypeName()) {
             case "java.lang.String":
                 executeButton.addActionListener(new ActionListener() {
@@ -120,6 +122,28 @@ public class ChangeValueDialog extends JDialog {
                 break;
             case "char":
             case "java.lang.Character":
+                executeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        char[] ch = valueChangePanel.getText().toCharArray();
+                        if (ch.length > 1) {
+                            JOptionPane.showMessageDialog(frame, "1文字以上入力できません");
+                            return;
+                        }
+                        if (panel instanceof ControlConstructorPanel) {
+                            ((ControlConstructorPanel)panel).getDataHolder().args[changeIndex] = (ch.length == 0 ? null : ch[0]);
+                            ((ControlConstructorPanel)panel).updateCheckContainValueLabel(changeIndex);
+                        } else if (panel instanceof ControlMethodPanel) {
+                            ((ControlMethodPanel)panel).getDataHolder().args[changeIndex] = (ch.length == 0 ? null : ch[0]);
+                            ((ControlMethodPanel)panel).updateCheckContainValueLabel(changeIndex);
+                        } else if (panel instanceof ControlFieldPanel) {
+                            ((ControlFieldPanel)panel).getDataHolder().value = (ch.length == 0 ? null : ch[0]);
+                            ((ControlFieldPanel)panel).updateCheckContainValueLabel();
+                        }
+                        setVisible(false);
+                    }
+                });
+                break;
             case "byte":
             case "java.lang.Byte":
             case "short":
@@ -129,41 +153,54 @@ public class ChangeValueDialog extends JDialog {
                 executeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (panel instanceof ControlConstructorPanel) {
-                            ((ControlConstructorPanel)panel).getDataHolder().args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
-                            ((ControlConstructorPanel)panel).updateCheckContainValueLabel(changeIndex);
-                        } else if (panel instanceof ControlMethodPanel) {
-                            ((ControlMethodPanel)panel).getDataHolder().args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
-                            ((ControlMethodPanel)panel).updateCheckContainValueLabel(changeIndex);
-                        } else if (panel instanceof ControlFieldPanel) {
-                            ((ControlFieldPanel)panel).getDataHolder().value = Integer.parseInt(valueChangePanel.getText());
-                            ((ControlFieldPanel)panel).updateCheckContainValueLabel();
+                        try {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Integer.parseInt(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Integer.parseInt(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                        } catch (NumberFormatException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "整数を入力してください");
+                            return;
                         }
                         setVisible(false);
                     }
                 });
+                break;
             case "long":
             case "java.lang.Long":
             case "float":
             case "java.lang.Float":
             case "double":
             case "java.lang.Double":
-                executeButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (panel instanceof ControlConstructorPanel) {
-                            ((ControlConstructorPanel)panel).getDataHolder().args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
-                            ((ControlConstructorPanel)panel).updateCheckContainValueLabel(changeIndex);
-                        } else if (panel instanceof ControlMethodPanel) {
-                            ((ControlMethodPanel)panel).getDataHolder().args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
-                            ((ControlMethodPanel)panel).updateCheckContainValueLabel(changeIndex);
-                        } else if (panel instanceof ControlFieldPanel) {
-                            ((ControlFieldPanel)panel).getDataHolder().value = Double.parseDouble(valueChangePanel.getText());
-                            ((ControlFieldPanel)panel).updateCheckContainValueLabel();
+                try {
+                    executeButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Double.parseDouble(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Double.parseDouble(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                            setVisible(false);
                         }
-                        setVisible(false);
-                    }
-                });
+                    });
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "実数を入力してください");
+                    return;
+                }
                 break;
             default:
         }

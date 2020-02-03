@@ -3,6 +3,10 @@ import java.awt.*;
 public class Main {
 
     public static void main(String[] args) {
+        callInterpretApp();
+    }
+
+    private static void callInterpretApp () {
         AppFrame frame = new AppFrame("Interpret");
 
         ConsoleAreaPanel consoleAreaPanel = new ConsoleAreaPanel();
