@@ -16,7 +16,7 @@ public class Main {
         //メンバ操作部分
         ControlMemberPanel controlMemberPanel = new ControlMemberPanel(fieldPanel, methodPanel, constructorPanel);
         //操作ボタン配置部分
-        OperationAreaPanel operationAreaPanel = new OperationAreaPanel(controlMemberPanel);
+        OperationAreaPanel operationAreaPanel = new OperationAreaPanel(frame, controlMemberPanel);
         //MainArea&Console部分
         CenterPanel centerPanel = new CenterPanel();
         MainAreaPanel mainAreaPanel = new MainAreaPanel();

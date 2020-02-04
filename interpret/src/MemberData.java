@@ -4,6 +4,7 @@ public class MemberData {
 
     private MemberType memberType;
     private Member member;
+    private Object value;
 
     public MemberData(MemberType memberType, Member member) {
         this.memberType = memberType;

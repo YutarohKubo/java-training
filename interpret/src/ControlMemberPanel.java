@@ -14,6 +14,18 @@ public class ControlMemberPanel extends InterpretPanel {
     private ControlMethodPanel methodPanel;
     private ControlConstructorPanel constructorPanel;
 
+    public ControlFieldPanel getFieldPanel() {
+        return fieldPanel;
+    }
+
+    public ControlMethodPanel getMethodPanel() {
+        return methodPanel;
+    }
+
+    public ControlConstructorPanel getConstructorPanel() {
+        return constructorPanel;
+    }
+
     public ControlMemberPanel(ControlFieldPanel fieldPanel, ControlMethodPanel methodPanel, ControlConstructorPanel constructorPanel) {
         this.fieldPanel = fieldPanel;
         this.methodPanel = methodPanel;
