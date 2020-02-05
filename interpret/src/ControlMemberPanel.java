@@ -52,6 +52,20 @@ public class ControlMemberPanel extends InterpretPanel {
         //setComponentMode(MemberType.FIELD);
     }
 
+    public void setExecuteButtonState(MemberType type, boolean enable) {
+        switch (type) {
+            case CONSTRUCTOR:
+                constructorPanel.setExecuteButtonState(enable);
+                break;
+            case METHOD:
+                methodPanel.setExecuteButtonState(enable);
+                break;
+            case FIELD:
+                fieldPanel.setExecuteButtonState(enable);
+                break;
+        }
+    }
+
     public ControlConstructorPanel.DataHolder getConstructorPanelDataHolder() {
         return constructorPanel.getDataHolder();
     }

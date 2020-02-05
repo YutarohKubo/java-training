@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class PropertyDialog extends JDialog {
+public class StatusDisplayDialog extends JDialog {
 
     public static final int DIALOG_WIDTH = 960;
     public static final int DIALOG_HEIGHT = 540;
@@ -15,7 +15,7 @@ public class PropertyDialog extends JDialog {
     private JLabel displayTitleLabel;
     private JLabel displayObjectLabel;
 
-    public PropertyDialog (Frame frame, ControlConstructorPanel controlConstructorPanel, ControlMethodPanel controlMethodPanel, ControlFieldPanel controlFieldPanel) {
+    public StatusDisplayDialog(Frame frame, ControlConstructorPanel controlConstructorPanel, ControlMethodPanel controlMethodPanel, ControlFieldPanel controlFieldPanel) {
         super(frame, true);
         this.frame = frame;
         this.controlConstructorPanel = controlConstructorPanel;

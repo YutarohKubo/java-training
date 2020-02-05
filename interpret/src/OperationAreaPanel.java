@@ -30,12 +30,12 @@ public class OperationAreaPanel extends InterpretPanel {
     void setupComponent() {
         panelButtonArea = new JPanel();
         panelButtonArea.setLayout(new BoxLayout(panelButtonArea, BoxLayout.PAGE_AXIS));
+        buttonProperty = new JButton("状態表示");
+        buttonProperty.setAlignmentX(0.5f);
         buttonCreateArrayMode = new JButton("配列生成");
         buttonCreateArrayMode.setAlignmentX(0.5f);
         buttonDisplayDeclaredMember = new JButton("宣言一覧表示");
         buttonDisplayDeclaredMember.setAlignmentX(0.5f);
-        buttonProperty = new JButton("プロパティ");
-        buttonProperty.setAlignmentX(0.5f);
     }
 
     private void addComponent() {
@@ -43,8 +43,8 @@ public class OperationAreaPanel extends InterpretPanel {
         buttonProperty.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PropertyDialog propertyDialog = new PropertyDialog(frame, controlMemberPanel.getConstructorPanel(), controlMemberPanel.getMethodPanel(), controlMemberPanel.getFieldPanel());
-                propertyDialog.setVisible(true);
+                StatusDisplayDialog statusDisplayDialog = new StatusDisplayDialog(frame, controlMemberPanel.getConstructorPanel(), controlMemberPanel.getMethodPanel(), controlMemberPanel.getFieldPanel());
+                statusDisplayDialog.setVisible(true);
             }
         });
         panelButtonArea.add(setMargin(buttonProperty, 0, 0, 0, 0));

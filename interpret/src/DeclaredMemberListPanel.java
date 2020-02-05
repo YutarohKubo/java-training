@@ -7,6 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +92,14 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         itemPanel.setBorder(new CompoundBorder(itemPanel.getBorder(), new EmptyBorder(0, 0, 0, 0)));
 
         if (isSelected) {
+            if (Modifier.isStatic(value.getMember().getModifiers()) || value.getMemberType() == MemberType.CONSTRUCTOR) {
+                controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
+            } else {
+                //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
+                if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
+                    controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                }
+            }
             //項目選択時の色反映させるための処理
             itemPanel.setOpaque(true);
             itemPanel.setBorder(new BevelBorder(BevelBorder.RAISED));

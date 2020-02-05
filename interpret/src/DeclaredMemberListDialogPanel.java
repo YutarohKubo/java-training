@@ -13,13 +13,15 @@ import java.util.List;
 public class DeclaredMemberListDialogPanel extends InterpretPanel implements ListCellRenderer<MemberData> {
 
     private ControlMemberPanel controlMemberPanel;
+    private OperationAreaDialogPanel operationAreaDialogPanel;
     private JList<MemberData> jListMember;
     private DefaultListModel<MemberData> model;
     private List<MemberData> listMember = new ArrayList<>();
     private boolean fragChangeItem = false;
 
-    public DeclaredMemberListDialogPanel(ControlMemberPanel controlMemberPanel) {
+    public DeclaredMemberListDialogPanel(ControlMemberPanel controlMemberPanel, OperationAreaDialogPanel operationAreaDialogPanel) {
         this.controlMemberPanel = controlMemberPanel;
+        this.operationAreaDialogPanel = operationAreaDialogPanel;
     }
 
     @Override
@@ -81,6 +83,11 @@ public class DeclaredMemberListDialogPanel extends InterpretPanel implements Lis
         itemPanel.setBorder(new CompoundBorder(itemPanel.getBorder(), new EmptyBorder(0, 0, 0, 0)));
 
         if (isSelected) {
+            if (value.getMemberType() == MemberType.CONSTRUCTOR) {
+                operationAreaDialogPanel.setButtonDetermineState(true);
+            } else {
+                operationAreaDialogPanel.setButtonDetermineState(false);
+            }
             //項目選択時の色反映させるための処理
             itemPanel.setOpaque(true);
             itemPanel.setBorder(new BevelBorder(BevelBorder.RAISED));

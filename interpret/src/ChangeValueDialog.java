@@ -68,9 +68,9 @@ public class ChangeValueDialog extends JDialog {
         controlFieldPanel = new ControlFieldPanel(this, controlConstructorPanel);
         controlMethodPanel = new ControlMethodPanel(this, controlConstructorPanel);
         controlMemberPanel = new ControlMemberPanel(controlFieldPanel, controlMethodPanel, controlConstructorPanel);
-        declaredMemberListDialogPanel = new DeclaredMemberListDialogPanel(controlMemberPanel);
-        declaredMemberListDialogPanel.setupJListMember(memberType.getTypeName());
         operationAreaDialogPanel = new OperationAreaDialogPanel(this, controlMemberPanel);
+        declaredMemberListDialogPanel = new DeclaredMemberListDialogPanel(controlMemberPanel, operationAreaDialogPanel);
+        declaredMemberListDialogPanel.setupJListMember(memberType.getTypeName());
         mainAreaDialogPanel.add(declaredMemberListDialogPanel, "declared_member_list_dialog_panel");
         this.add(operationAreaDialogPanel, BorderLayout.WEST);
         this.add(mainAreaDialogPanel, BorderLayout.CENTER);
@@ -146,8 +146,54 @@ public class ChangeValueDialog extends JDialog {
                 break;
             case "byte":
             case "java.lang.Byte":
+                executeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Byte.parseByte(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Byte.parseByte(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Byte.parseByte(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                        } catch (NumberFormatException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "整数を入力してください");
+                            return;
+                        }
+                        setVisible(false);
+                    }
+                });
+                break;
             case "short":
             case "java.lang.Short":
+                executeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Short.parseShort(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Short.parseShort(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Short.parseShort(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                        } catch (NumberFormatException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "整数を入力してください");
+                            return;
+                        }
+                        setVisible(false);
+                    }
+                });
+                break;
             case "int":
             case "java.lang.Integer":
                 executeButton.addActionListener(new ActionListener() {
@@ -175,8 +221,54 @@ public class ChangeValueDialog extends JDialog {
                 break;
             case "long":
             case "java.lang.Long":
+                executeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Long.parseLong(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Long.parseLong(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Long.parseLong(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                        } catch (NumberFormatException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "整数を入力してください");
+                            return;
+                        }
+                        setVisible(false);
+                    }
+                });
+                break;
             case "float":
             case "java.lang.Float":
+                try {
+                    executeButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (panel instanceof ControlConstructorPanel) {
+                                ((ControlConstructorPanel) panel).getDataHolder().args[changeIndex] = Float.parseFloat(valueChangePanel.getText());
+                                ((ControlConstructorPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlMethodPanel) {
+                                ((ControlMethodPanel) panel).getDataHolder().args[changeIndex] = Float.parseFloat(valueChangePanel.getText());
+                                ((ControlMethodPanel) panel).updateCheckContainValueLabel(changeIndex);
+                            } else if (panel instanceof ControlFieldPanel) {
+                                ((ControlFieldPanel) panel).getDataHolder().value = Float.parseFloat(valueChangePanel.getText());
+                                ((ControlFieldPanel) panel).updateCheckContainValueLabel();
+                            }
+                            setVisible(false);
+                        }
+                    });
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "実数を入力してください");
+                    return;
+                }
+                break;
             case "double":
             case "java.lang.Double":
                 try {

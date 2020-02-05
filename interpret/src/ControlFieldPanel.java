@@ -107,7 +107,6 @@ public class ControlFieldPanel extends InterpretPanel {
                     return;
                 }
                 Field targetField = (Field) targetFieldData.getMember();
-                targetField.setAccessible(true);
                 Field modifiersField = null;
                 try {
                     modifiersField = Field.class.getDeclaredField("modifiers");
@@ -119,6 +118,9 @@ public class ControlFieldPanel extends InterpretPanel {
                         modifiersField.setAccessible(true);
                         modifiersField.setInt(targetField,
                                 targetField.getModifiers() & ~Modifier.FINAL);
+                    }
+                    if (!Modifier.isPublic(targetField.getModifiers())) {
+                        targetField.setAccessible(true);
                     }
                     if (Modifier.isStatic(targetField.getModifiers())) {
                         targetField.set(null, dataHolder.value);
@@ -135,5 +137,9 @@ public class ControlFieldPanel extends InterpretPanel {
         buttonPanel.add(checkContainValueInArgPanel);
         buttonPanel.add(executeButton);
         this.add(buttonPanel);
+    }
+
+    public void setExecuteButtonState(boolean enable) {
+        executeButton.setEnabled(enable);
     }
 }

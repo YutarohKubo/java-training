@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 public class ControlConstructorPanel extends InterpretPanel {
@@ -72,6 +73,9 @@ public class ControlConstructorPanel extends InterpretPanel {
             return;
         }
         Constructor targetConstructor = (Constructor) targetConstructorData.getMember();
+        if (!Modifier.isPublic(targetConstructor.getModifiers())) {
+            targetConstructor.setAccessible(true);
+        }
         Type[] argTypes = targetConstructor.getGenericParameterTypes();
         dataHolder.args = new Object[argTypes.length];
         constructorArgumentButtons = new JButton[argTypes.length];
@@ -130,6 +134,10 @@ public class ControlConstructorPanel extends InterpretPanel {
         executeButton.setAlignmentX(0.5f);
         buttonPanel.add(executeButton);
         this.add(buttonPanel);
+    }
+
+    public void setExecuteButtonState(boolean enable) {
+        executeButton.setEnabled(enable);
     }
 
 }

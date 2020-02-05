@@ -134,4 +134,8 @@ public class ControlMethodPanel extends InterpretPanel {
         buttonPanel.add(executeButton);
         this.add(buttonPanel);
     }
+
+    public void setExecuteButtonState(boolean enable) {
+        executeButton.setEnabled(enable);
+    }
 }

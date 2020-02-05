@@ -6,6 +6,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +77,23 @@ public class MemberStateListPanel extends InterpretPanel implements ListCellRend
         itemPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         itemPanel.setOpaque(false);
         JLabel memberLabel = new JLabel(value.toString());
-        JLabel memberValueLabel = new JLabel();
+        Field field = null;
+        if (value.getMember() instanceof Field) {
+            field = (Field) value.getMember();
+        }
+        Object valueMemberData = null;
+        if (field != null) {
+            try {
+                field.setAccessible(true);
+                valueMemberData = field.get(controlConstructorPanel.getDataHolder().generatedObject);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");
+            }
+        }
+        JLabel memberValueLabel = new JLabel("                      : " + (valueMemberData != null ? valueMemberData.toString() : "NULL"));
         itemPanel.add(memberLabel);
+        itemPanel.add(memberValueLabel);
         itemPanel.setBorder(new CompoundBorder(itemPanel.getBorder(), new EmptyBorder(0, 0, 0, 0)));
         if (isSelected) {
             //項目選択時の色反映させるための処理
@@ -85,6 +101,6 @@ public class MemberStateListPanel extends InterpretPanel implements ListCellRend
             itemPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
             itemPanel.setBackground(Color.YELLOW);
         }
-        return null;
+        return itemPanel;
     }
 }

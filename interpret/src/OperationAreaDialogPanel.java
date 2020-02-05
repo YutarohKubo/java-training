@@ -57,6 +57,10 @@ public class OperationAreaDialogPanel extends InterpretPanel{
         });
     }
 
+    public void setButtonDetermineState(boolean enabled) {
+        buttonDetermine.setEnabled(enabled);
+    }
+
     private void addComponent() {
         this.add(controlMemberPanel);
         panelButtonArea.add(setMargin(buttonClose, 0, 0, 0, 0));
