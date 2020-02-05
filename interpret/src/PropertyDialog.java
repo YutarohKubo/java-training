@@ -10,6 +10,7 @@ public class PropertyDialog extends JDialog {
     private ControlConstructorPanel controlConstructorPanel;
     private ControlMethodPanel controlMethodPanel;
     private ControlFieldPanel controlFieldPanel;
+    private MemberStateListPanel memberStateListPanel;
     private JPanel displayObjectPanel;
     private JLabel displayTitleLabel;
     private JLabel displayObjectLabel;
@@ -37,7 +38,10 @@ public class PropertyDialog extends JDialog {
         }
         displayObjectPanel.add(displayTitleLabel);
         displayObjectPanel.add(displayObjectLabel);
+        memberStateListPanel = new MemberStateListPanel(controlConstructorPanel);
+        memberStateListPanel.setupFieldInNowObject();
         this.add(displayObjectPanel, BorderLayout.NORTH);
+        this.add(memberStateListPanel, BorderLayout.CENTER);
     }
 
 }
