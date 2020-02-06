@@ -14,10 +14,12 @@ public class OperationAreaPanel extends InterpretPanel {
     JButton buttonCreateArrayMode;
     JButton buttonDisplayDeclaredMember;
     JButton buttonProperty;
+    MainAreaPanel mainAreaPanel;
 
-    public OperationAreaPanel (Frame frame, ControlMemberPanel controlMemberPanel) {
+    public OperationAreaPanel (Frame frame, ControlMemberPanel controlMemberPanel, MainAreaPanel mainAreaPanel) {
         this.frame = frame;
         this.controlMemberPanel = controlMemberPanel;
+        this.mainAreaPanel = mainAreaPanel;
         addComponent();
     }
 
@@ -47,9 +49,44 @@ public class OperationAreaPanel extends InterpretPanel {
                 statusDisplayDialog.setVisible(true);
             }
         });
+        buttonCreateArrayMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this);
+                arrayLengthSettingDialog.setVisible(true);
+            }
+        });
         panelButtonArea.add(setMargin(buttonProperty, 0, 0, 0, 0));
         panelButtonArea.add(setMargin(buttonCreateArrayMode, 0, 0, 0, 0));
         panelButtonArea.add(setMargin(buttonDisplayDeclaredMember, 0, 0, 0, 0));
         this.add(panelButtonArea);
+    }
+
+    public void changeButtonCreateArrayModeToBack() {
+        buttonCreateArrayMode.setText("戻る");
+        if (buttonCreateArrayMode.getActionListeners().length >= 1) {
+            buttonCreateArrayMode.removeActionListener(buttonCreateArrayMode.getActionListeners()[0]);
+        }
+        buttonCreateArrayMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainAreaPanel.removeArrayPanel();
+                changeButtonCreateArrayModeToCreate();
+            }
+        });
+    }
+
+    public void changeButtonCreateArrayModeToCreate() {
+        buttonCreateArrayMode.setText("配列生成");
+        if (buttonCreateArrayMode.getActionListeners().length >= 1) {
+            buttonCreateArrayMode.removeActionListener(buttonCreateArrayMode.getActionListeners()[0]);
+        }
+        buttonCreateArrayMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this);
+                arrayLengthSettingDialog.setVisible(true);
+            }
+        });
     }
 }

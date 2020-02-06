@@ -2,11 +2,15 @@ import java.awt.*;
 
 public class MainAreaPanel extends InterpretPanel {
 
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
 
+    public MainAreaPanel (DisplayInsideArrayPanel displayInsideArrayPanel) {
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
+    }
 
     @Override
     void setPanelLayout() {
-        this.setLayout(new CardLayout());
+        this.setLayout(new BorderLayout());
         this.setOpaque(false);
     }
 
@@ -14,4 +18,15 @@ public class MainAreaPanel extends InterpretPanel {
     void setupComponent() {
 
     }
+
+    public void showArrayPanel() {
+        this.add(displayInsideArrayPanel, BorderLayout.EAST);
+        this.revalidate();
+    }
+
+    public void removeArrayPanel() {
+        this.remove(displayInsideArrayPanel);
+        this.revalidate();
+    }
+
 }
