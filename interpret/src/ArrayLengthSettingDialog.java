@@ -28,6 +28,7 @@ public class ArrayLengthSettingDialog extends JDialog {
         buttonOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                mainAreaPanel.makeArray(numberSpinner.getValue());
                 mainAreaPanel.showArrayPanel();
                 operationAreaPanel.changeButtonCreateArrayModeToBack();
                 setVisible(false);

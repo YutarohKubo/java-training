@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -41,6 +43,13 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
         this.add(sp);
     }
 
+    public void makeList(int length) {
+        for (int i = 0; i < length ; i++) {
+            listArray.add(new ListItemData(i, null));
+            model.addElement(new ListItemData(i, null));
+        }
+    }
+
     public void clearList() {
         if (listArray != null) {
             listArray.clear();
@@ -52,6 +61,23 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
 
     @Override
     public Component getListCellRendererComponent(JList<? extends ListItemData> list, ListItemData value, int index, boolean isSelected, boolean cellHasFocus) {
-        return null;
+        JPanel itemPanel = new JPanel();
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
+        itemPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        itemPanel.setOpaque(false);
+        JLabel numberLabel = new JLabel(Integer.toString(value.getItemNumber()));
+        JLabel memberNameLabel = new JLabel(value.toString());
+        itemPanel.add(numberLabel);
+        itemPanel.add(memberNameLabel);
+        if (isSelected) {
+            //項目選択時の色反映させるための処理
+            itemPanel.setOpaque(true);
+            itemPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
+            itemPanel.setBackground(Color.RED);
+            if (fragChangeItem) {
+                fragChangeItem = false;
+            }
+        }
+        return itemPanel;
     }
 }

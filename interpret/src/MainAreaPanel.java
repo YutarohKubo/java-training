@@ -24,6 +24,10 @@ public class MainAreaPanel extends InterpretPanel {
         this.revalidate();
     }
 
+    public void makeArray(int length) {
+        displayInsideArrayPanel.makeList(length);
+    }
+
     public void removeArrayPanel() {
         this.remove(displayInsideArrayPanel);
         this.revalidate();

@@ -17,4 +17,12 @@ public class ListItemData {
     public Member getMember() {
         return member;
     }
+
+    @Override
+    public String toString() {
+        if (member == null) {
+            return "NULL";
+        }
+        return member.toString();
+    }
 }
