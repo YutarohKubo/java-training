@@ -4,15 +4,21 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 画面右側に出現する、配列の中身を表現するGUI断片
+ */
 public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellRenderer<ListItemData> {
 
     private JList<ListItemData> jListArray;
     private DefaultListModel<ListItemData> model;
     private List<ListItemData> listArray = new ArrayList<>();
     private boolean fragChangeItem = false;
+    private Object arrayData;
+    private int arrayLength;
 
     public DisplayInsideArrayPanel() {
 
@@ -43,11 +49,15 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
         this.add(sp);
     }
 
-    public void makeList(int length) {
-        for (int i = 0; i < length ; i++) {
-            listArray.add(new ListItemData(i, null));
-            model.addElement(new ListItemData(i, null));
-        }
+    public void makeList(Class<?> clazz, int length) {
+        this.arrayLength = length;
+        arrayData = Array.newInstance(clazz, length);
+        reloadListArray();
+    }
+
+    public void reMakeList(Class<?> clazz) {
+        arrayData = Array.newInstance(clazz, this.arrayLength);
+        reloadListArray();
     }
 
     public void clearList() {
@@ -57,6 +67,25 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
         if (model != null) {
             model.clear();
         }
+    }
+
+    public void setArrayElement (Object createdInstance) {
+        Array.set(arrayData, jListArray.getSelectedIndex(), createdInstance);
+        reloadListArray();
+    }
+
+    public Object getArrayElement() {
+        return Array.get(arrayData, jListArray.getSelectedIndex());
+    }
+
+    private void reloadListArray () {
+        clearList();
+        for (int i = 0; i < Array.getLength(arrayData) ; i++) {
+            ListItemData itemData = new ListItemData(i, Array.get(arrayData, i));
+            listArray.add(itemData);
+            model.addElement(itemData);
+        }
+        revalidate();
     }
 
     @Override

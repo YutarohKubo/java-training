@@ -14,7 +14,7 @@ public class ArrayLengthSettingDialog extends JDialog {
     private MainAreaPanel mainAreaPanel;
     private OperationAreaPanel operationAreaPanel;
 
-    public ArrayLengthSettingDialog(Frame frame, MainAreaPanel mainAreaPanel, OperationAreaPanel operationAreaPanel) {
+    public ArrayLengthSettingDialog(Frame frame, MainAreaPanel mainAreaPanel, OperationAreaPanel operationAreaPanel, Class<?> arrayTypeClazz) {
         super(frame, "配列の大きさ設定", true);
         this.mainAreaPanel = mainAreaPanel;
         this.operationAreaPanel = operationAreaPanel;
@@ -28,7 +28,8 @@ public class ArrayLengthSettingDialog extends JDialog {
         buttonOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainAreaPanel.makeArray(numberSpinner.getValue());
+                mainAreaPanel.makeArray(arrayTypeClazz, numberSpinner.getValue());
+                mainAreaPanel.setupMemberList(arrayTypeClazz);
                 mainAreaPanel.showArrayPanel();
                 operationAreaPanel.changeButtonCreateArrayModeToBack();
                 setVisible(false);

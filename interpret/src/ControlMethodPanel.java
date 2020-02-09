@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 public class ControlMethodPanel extends InterpretPanel {
 
     private AppFrame appFrame;
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private Dialog parentDialog;
     private ControlConstructorPanel controlConstructorPanel;
     private JPanel buttonPanel;
@@ -29,12 +30,13 @@ public class ControlMethodPanel extends InterpretPanel {
         return dataHolder;
     }
 
-    public ControlMethodPanel(AppFrame appFrame, ControlConstructorPanel controlConstructorPanel) {
+    public ControlMethodPanel(AppFrame appFrame, ControlConstructorPanel controlConstructorPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
         this.appFrame = appFrame;
         this.controlConstructorPanel = controlConstructorPanel;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
-    public ControlMethodPanel(Dialog parentDialog,  ControlConstructorPanel controlConstructorPanel) {
+    public ControlMethodPanel(Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
         this.parentDialog = parentDialog;
         this.controlConstructorPanel = controlConstructorPanel;
     }
@@ -58,6 +60,7 @@ public class ControlMethodPanel extends InterpretPanel {
     }
 
     public void setTargetMethodData(MemberData targetMethodData) {
+        //選択リスト項目が切り替わるたび呼ばれる
         this.targetMethodData = targetMethodData;
         dataHolder = new DataHolder();
     }
@@ -101,6 +104,7 @@ public class ControlMethodPanel extends InterpretPanel {
         if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
+        //メソッド実行ボタンの挙動設定
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,9 +113,14 @@ public class ControlMethodPanel extends InterpretPanel {
                     if (Modifier.isStatic(targetMethod.getModifiers())) {
                         targetMethod.invoke(null, dataHolder.args);
                     } else {
-                        targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
+                        if (parentDialog == null && appFrame.isArrayPanelVisible()) {
+                            targetMethod.invoke(displayInsideArrayPanel.getArrayElement(), dataHolder.args);
+                            ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
+                        } else {
+                            targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
+                            ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
+                        }
                     }
-                    ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                     ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");

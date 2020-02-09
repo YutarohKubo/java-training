@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 public class ControlFieldPanel extends InterpretPanel {
 
     private AppFrame appFrame;
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private Dialog parentDialog;
     private ControlConstructorPanel controlConstructorPanel;
     private JPanel buttonPanel;
@@ -28,10 +29,10 @@ public class ControlFieldPanel extends InterpretPanel {
         return dataHolder;
     }
 
-    public ControlFieldPanel(AppFrame appFrame, ControlConstructorPanel controlConstructorPanel) {
+    public ControlFieldPanel(AppFrame appFrame, ControlConstructorPanel controlConstructorPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
         this.appFrame = appFrame;
         this.controlConstructorPanel = controlConstructorPanel;
-        //addComponent();
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
     public ControlFieldPanel(Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
@@ -124,10 +125,16 @@ public class ControlFieldPanel extends InterpretPanel {
                     }
                     if (Modifier.isStatic(targetField.getModifiers())) {
                         targetField.set(null, dataHolder.value);
+                        ConsoleAreaPanel.appendNewLog("Succeed in renewing field.(" + targetField.getName() + ")");
                     } else {
-                        targetField.set(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.value);
+                        if (parentDialog == null && appFrame.isArrayPanelVisible()) {
+                            targetField.set(displayInsideArrayPanel.getArrayElement(), dataHolder.value);
+                            ConsoleAreaPanel.appendNewLog("Succeed in renewing field.(" + targetField.getName() + ")");
+                        } else {
+                            targetField.set(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.value);
+                            ConsoleAreaPanel.appendNewLog("Succeed in renewing field.(" + targetField.getName() + ")");
+                        }
                     }
-                    ConsoleAreaPanel.appendNewLog("Succeed in renewing field.(" + targetField.getName() + ")");
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                     ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");

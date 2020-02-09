@@ -5,7 +5,8 @@ import java.awt.event.ActionListener;
 
 public class OperationAreaPanel extends InterpretPanel {
 
-    Frame frame;
+    AppFrame frame;
+    private SearchAreaPanel searchAreaPanel;
     JPanel panelButtonArea;
     ControlMemberPanel controlMemberPanel;
     JButton buttonModifyVariable;
@@ -14,13 +15,19 @@ public class OperationAreaPanel extends InterpretPanel {
     JButton buttonCreateArrayMode;
     JButton buttonDisplayDeclaredMember;
     JButton buttonProperty;
+    DisplayInsideArrayPanel displayInsideArrayPanel;
     MainAreaPanel mainAreaPanel;
 
-    public OperationAreaPanel (Frame frame, ControlMemberPanel controlMemberPanel, MainAreaPanel mainAreaPanel) {
+    public OperationAreaPanel (AppFrame frame, ControlMemberPanel controlMemberPanel, MainAreaPanel mainAreaPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
         this.frame = frame;
         this.controlMemberPanel = controlMemberPanel;
         this.mainAreaPanel = mainAreaPanel;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
         addComponent();
+    }
+
+    public void setSearchAreaPanel(SearchAreaPanel searchAreaPanel) {
+        this.searchAreaPanel = searchAreaPanel;
     }
 
     @Override
@@ -45,14 +52,22 @@ public class OperationAreaPanel extends InterpretPanel {
         buttonProperty.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StatusDisplayDialog statusDisplayDialog = new StatusDisplayDialog(frame, controlMemberPanel.getConstructorPanel(), controlMemberPanel.getMethodPanel(), controlMemberPanel.getFieldPanel());
+                StatusDisplayDialog statusDisplayDialog = new StatusDisplayDialog(frame, displayInsideArrayPanel, controlMemberPanel.getConstructorPanel(), controlMemberPanel.getMethodPanel(), controlMemberPanel.getFieldPanel());
                 statusDisplayDialog.setVisible(true);
             }
         });
         buttonCreateArrayMode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this);
+                String targetArrayType = searchAreaPanel.getSearchFieldText();
+                Class<?> targetClazz = null;
+                try {
+                    targetClazz = Class.forName(targetArrayType);
+                } catch (ClassNotFoundException ex) {
+                    ConsoleAreaPanel.appendNewLog("Throw ClassNotFoundException.");
+                    ex.printStackTrace();
+                }
+                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this, targetClazz);
                 arrayLengthSettingDialog.setVisible(true);
             }
         });
@@ -84,7 +99,15 @@ public class OperationAreaPanel extends InterpretPanel {
         buttonCreateArrayMode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this);
+                String targetArrayType = searchAreaPanel.getSearchFieldText();
+                Class<?> targetClazz = null;
+                try {
+                    targetClazz = Class.forName(targetArrayType);
+                } catch (ClassNotFoundException ex) {
+                    ConsoleAreaPanel.appendNewLog("Throw ClassNotFoundException.");
+                    ex.printStackTrace();
+                }
+                ArrayLengthSettingDialog arrayLengthSettingDialog = new ArrayLengthSettingDialog(frame, mainAreaPanel, OperationAreaPanel.this, targetClazz);
                 arrayLengthSettingDialog.setVisible(true);
             }
         });

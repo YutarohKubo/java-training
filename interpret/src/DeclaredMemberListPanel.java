@@ -14,13 +14,17 @@ import java.util.List;
 public class DeclaredMemberListPanel extends InterpretPanel implements ListCellRenderer<MemberData> {
 
     private ControlMemberPanel controlMemberPanel;
+    private AppFrame frame;
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private JList<MemberData> jListMember;
     private DefaultListModel<MemberData> model;
     private List<MemberData> listMember = new ArrayList<>();
     private boolean fragChangeItem = false;
 
-    public DeclaredMemberListPanel(ControlMemberPanel controlMemberPanel) {
+    public DeclaredMemberListPanel(AppFrame frame, ControlMemberPanel controlMemberPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
+        this.frame = frame;
         this.controlMemberPanel = controlMemberPanel;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
     @Override
@@ -63,6 +67,17 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         }
     }
 
+    public void setupJListMember(Class<?> clazz) {
+        clearList();
+        Class<?> targetClazz = clazz;
+        while (targetClazz != null) {
+            setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR);
+            setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
+            setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD);
+            targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
+        }
+    }
+
     public void clearList() {
         if (listMember != null) {
             listMember.clear();
@@ -95,9 +110,16 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
             if (Modifier.isStatic(value.getMember().getModifiers()) || value.getMemberType() == MemberType.CONSTRUCTOR) {
                 controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
             } else {
-                //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
-                if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
-                    controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                if (frame.isArrayPanelVisible()) {
+                    //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
+                    if (displayInsideArrayPanel.getArrayElement() == null) {
+                        controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                    }
+                } else {
+                    //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
+                    if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
+                        controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                    }
                 }
             }
             //項目選択時の色反映させるための処理

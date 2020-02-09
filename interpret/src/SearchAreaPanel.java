@@ -6,13 +6,16 @@ import java.awt.event.ActionListener;
 public class SearchAreaPanel extends InterpretPanel {
 
     private DeclaredMemberListPanel declaredMemberListPanel;
-
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private JTextField textSearchField;
+    private AppFrame frame;
     private JButton buttonSearch;
 
-    public SearchAreaPanel(DeclaredMemberListPanel declaredMemberListPanel) {
+    public SearchAreaPanel(AppFrame frame, DeclaredMemberListPanel declaredMemberListPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
         this.setBackground(AppStyle.INDIGO);
+        this.frame = frame;
         this.declaredMemberListPanel = declaredMemberListPanel;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
     @Override
@@ -34,12 +37,26 @@ public class SearchAreaPanel extends InterpretPanel {
         buttonSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                declaredMemberListPanel.setupJListMember(textSearchField.getText());
+                Class<?> targetClazz = null;
+                try {
+                    targetClazz = Class.forName(textSearchField.getText());
+                } catch (ClassNotFoundException ex) {
+                    ConsoleAreaPanel.appendNewLog("Throw ClassNotFoundException.");
+                    ex.printStackTrace();
+                }
+                declaredMemberListPanel.setupJListMember(targetClazz);
+                if (frame.isArrayPanelVisible()) {
+                    displayInsideArrayPanel.reMakeList(targetClazz);
+                }
             }
         });
         this.add(textSearchLabel);
         this.add(textSearchField);
         this.add(buttonSearch);
+    }
+
+    public String getSearchFieldText() {
+        return textSearchField.getText();
     }
 
 }

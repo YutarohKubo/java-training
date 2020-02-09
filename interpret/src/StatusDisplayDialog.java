@@ -6,7 +6,8 @@ public class StatusDisplayDialog extends JDialog {
     public static final int DIALOG_WIDTH = 960;
     public static final int DIALOG_HEIGHT = 540;
 
-    private Frame frame;
+    private AppFrame frame;
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private ControlConstructorPanel controlConstructorPanel;
     private ControlMethodPanel controlMethodPanel;
     private ControlFieldPanel controlFieldPanel;
@@ -15,9 +16,10 @@ public class StatusDisplayDialog extends JDialog {
     private JLabel displayTitleLabel;
     private JLabel displayObjectLabel;
 
-    public StatusDisplayDialog(Frame frame, ControlConstructorPanel controlConstructorPanel, ControlMethodPanel controlMethodPanel, ControlFieldPanel controlFieldPanel) {
+    public StatusDisplayDialog(AppFrame frame, DisplayInsideArrayPanel displayInsideArrayPanel, ControlConstructorPanel controlConstructorPanel, ControlMethodPanel controlMethodPanel, ControlFieldPanel controlFieldPanel) {
         super(frame, true);
         this.frame = frame;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
         this.controlConstructorPanel = controlConstructorPanel;
         this.controlMethodPanel = controlMethodPanel;
         this.controlFieldPanel = controlFieldPanel;
@@ -31,15 +33,25 @@ public class StatusDisplayDialog extends JDialog {
         displayObjectPanel.setLayout(new FlowLayout());
         displayTitleLabel = new JLabel("Now Instance : ");
         displayObjectLabel = new JLabel();
-        if (controlConstructorPanel.getDataHolder() == null || controlConstructorPanel.getDataHolder().generatedObject == null) {
-            displayObjectLabel.setText("null");
+        if (frame.isArrayPanelVisible()) {
+            if (displayInsideArrayPanel.getArrayElement() == null){
+                displayObjectLabel.setText("null");
+            } else {
+                displayObjectLabel.setText(displayInsideArrayPanel.getArrayElement().getClass().getName());
+                memberStateListPanel = new MemberStateListPanel(frame, displayInsideArrayPanel, controlConstructorPanel);
+                memberStateListPanel.setupFieldInNowObject(displayInsideArrayPanel.getArrayElement().getClass());
+            }
         } else {
-            displayObjectLabel.setText(controlConstructorPanel.getDataHolder().generatedObject.getClass().getName());
+            if (controlConstructorPanel.getDataHolder() == null || controlConstructorPanel.getDataHolder().generatedObject == null) {
+                displayObjectLabel.setText("null");
+            } else {
+                displayObjectLabel.setText(controlConstructorPanel.getDataHolder().generatedObject.getClass().getName());
+                memberStateListPanel = new MemberStateListPanel(frame, displayInsideArrayPanel, controlConstructorPanel);
+                memberStateListPanel.setupFieldInNowObject(controlConstructorPanel.getDataHolder().generatedObject.getClass());
+            }
         }
         displayObjectPanel.add(displayTitleLabel);
         displayObjectPanel.add(displayObjectLabel);
-        memberStateListPanel = new MemberStateListPanel(controlConstructorPanel);
-        memberStateListPanel.setupFieldInNowObject();
         this.add(displayObjectPanel, BorderLayout.NORTH);
         this.add(memberStateListPanel, BorderLayout.CENTER);
     }

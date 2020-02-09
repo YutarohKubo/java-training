@@ -13,12 +13,16 @@ import java.util.List;
 
 public class MemberStateListPanel extends InterpretPanel implements ListCellRenderer<MemberData> {
 
+    private AppFrame frame;
+    private DisplayInsideArrayPanel displayInsideArrayPanel;
     private JList<MemberData> jListMember;
     private DefaultListModel<MemberData> model;
     private List<MemberData> listMember = new ArrayList<>();
     private ControlConstructorPanel controlConstructorPanel;
 
-    public MemberStateListPanel(ControlConstructorPanel controlConstructorPanel) {
+    public MemberStateListPanel(AppFrame frame, DisplayInsideArrayPanel displayInsideArrayPanel, ControlConstructorPanel controlConstructorPanel) {
+        this.frame = frame;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
         this.controlConstructorPanel = controlConstructorPanel;
     }
 
@@ -40,12 +44,9 @@ public class MemberStateListPanel extends InterpretPanel implements ListCellRend
         this.add(sp);
     }
 
-    public void setupFieldInNowObject() {
+    public void setupFieldInNowObject(Class<?> clazz) {
         clearList();
-        if (controlConstructorPanel.getDataHolder() == null || controlConstructorPanel.getDataHolder().generatedObject == null) {
-            return;
-        }
-        Class<?> targetClazz = controlConstructorPanel.getDataHolder().generatedObject.getClass();
+        Class<?> targetClazz = clazz;
         while (targetClazz != null) {
             setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
             targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
@@ -85,7 +86,11 @@ public class MemberStateListPanel extends InterpretPanel implements ListCellRend
         if (field != null) {
             try {
                 field.setAccessible(true);
-                valueMemberData = field.get(controlConstructorPanel.getDataHolder().generatedObject);
+                if (frame.isArrayPanelVisible()) {
+                    valueMemberData = field.get(displayInsideArrayPanel.getArrayElement());
+                } else {
+                    valueMemberData = field.get(controlConstructorPanel.getDataHolder().generatedObject);
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
                 ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");

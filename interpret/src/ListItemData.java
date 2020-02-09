@@ -3,26 +3,40 @@ import java.lang.reflect.Member;
 public class ListItemData {
 
     private int itemNumber;
-    private Member member;
+    private Object arrayItem;
 
-    public ListItemData(int itemNumber, Member member) {
+    private DataHolder dataHolder;
+
+    public class DataHolder {
+        public Object generatedObject;
+    }
+
+    public DataHolder getDataHolder() {
+        return dataHolder;
+    }
+
+    public ListItemData(int itemNumber, Object arrayItem) {
         this.itemNumber = itemNumber;
-        this.member = member;
+        this.arrayItem = arrayItem;
     }
 
     public int getItemNumber() {
         return itemNumber;
     }
 
-    public Member getMember() {
-        return member;
+    public Object getArrayItem() {
+        return arrayItem;
+    }
+
+    public void setupDataHolder () {
+        dataHolder = new DataHolder();
     }
 
     @Override
     public String toString() {
-        if (member == null) {
+        if (arrayItem == null) {
             return "NULL";
         }
-        return member.toString();
+        return arrayItem.toString();
     }
 }

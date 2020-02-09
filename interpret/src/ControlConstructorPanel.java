@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 public class ControlConstructorPanel extends InterpretPanel {
 
     private AppFrame appFrame;
+    DisplayInsideArrayPanel displayInsideArrayPanel;
     private Dialog parentDialog;
     private JPanel buttonPanel;
     private JPanel[] checkContainValueInArgPanel;
@@ -29,8 +30,9 @@ public class ControlConstructorPanel extends InterpretPanel {
         return dataHolder;
     }
 
-    public ControlConstructorPanel(AppFrame appFrame) {
+    public ControlConstructorPanel(AppFrame appFrame, DisplayInsideArrayPanel displayInsideArrayPanel) {
         this.appFrame = appFrame;
+        this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
     public ControlConstructorPanel(Dialog parentDialog) {
@@ -109,8 +111,13 @@ public class ControlConstructorPanel extends InterpretPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dataHolder.generatedObject = targetConstructor.newInstance(dataHolder.args);
-                    ConsoleAreaPanel.appendNewLog("Succeed in Creating Object.(" + targetConstructor.getName() + ")");
+                    if (parentDialog == null && appFrame.isArrayPanelVisible()) {
+                        displayInsideArrayPanel.setArrayElement(targetConstructor.newInstance(dataHolder.args));
+                        ConsoleAreaPanel.appendNewLog("Succeed in Creating Object.(" + targetConstructor.getName() + ")");
+                    } else {
+                        dataHolder.generatedObject = targetConstructor.newInstance(dataHolder.args);
+                        ConsoleAreaPanel.appendNewLog("Succeed in Creating Object.(" + targetConstructor.getName() + ")");
+                    }
                 } catch (InstantiationException ex) {
                     //抽象クラスなど、インスタンス化しようとしたとき
                     ConsoleAreaPanel.appendNewLog("Throw InstantiationException.");
