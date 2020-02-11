@@ -53,7 +53,9 @@ public class StatusDisplayDialog extends JDialog {
         displayObjectPanel.add(displayTitleLabel);
         displayObjectPanel.add(displayObjectLabel);
         this.add(displayObjectPanel, BorderLayout.NORTH);
-        this.add(memberStateListPanel, BorderLayout.CENTER);
+        if (memberStateListPanel != null) {
+            this.add(memberStateListPanel, BorderLayout.CENTER);
+        }
     }
 
 }

@@ -18,7 +18,9 @@ public class ConsoleAreaPanel extends InterpretPanel {
 
     @Override
     void setupComponent() {
-        textArea = new JTextArea(5, 60);
+        textArea = new JTextArea(8, 60);
+        textArea.setBackground(Color.BLACK);
+        textArea.setForeground(Color.WHITE);
         scrollPane = new JScrollPane(textArea);
     }
 

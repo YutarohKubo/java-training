@@ -109,17 +109,22 @@ public class ControlMethodPanel extends InterpretPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    Object returnObject = null;
                     targetMethod.setAccessible(true);
                     if (Modifier.isStatic(targetMethod.getModifiers())) {
-                        targetMethod.invoke(null, dataHolder.args);
+                        returnObject = targetMethod.invoke(null, dataHolder.args);
                     } else {
                         if (parentDialog == null && appFrame.isArrayPanelVisible()) {
-                            targetMethod.invoke(displayInsideArrayPanel.getArrayElement(), dataHolder.args);
-                            ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
+                            returnObject = targetMethod.invoke(displayInsideArrayPanel.getArrayElement(), dataHolder.args);
                         } else {
-                            targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
-                            ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod + getName() + ")");
+                            returnObject = targetMethod.invoke(controlConstructorPanel.getDataHolder().generatedObject, dataHolder.args);
                         }
+                    }
+                    ConsoleAreaPanel.appendNewLog("Succeed in executing method.(" + targetMethod.getName() + ")");
+                    if ("void".equals(targetMethod.getReturnType().getTypeName())) {
+                        ConsoleAreaPanel.appendNewLog("return value is Nothing");
+                    } else {
+                        ConsoleAreaPanel.appendNewLog("return value is " + returnObject);
                     }
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();

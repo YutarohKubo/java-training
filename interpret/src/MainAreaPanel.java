@@ -54,7 +54,7 @@ public class MainAreaPanel extends InterpretPanel {
     }
 
     public void setupMemberList(Class<?> clazz) {
-        declaredMemberListPanel.setupJListMember(clazz);
+        declaredMemberListPanel.setupJListMember(clazz, "");
     }
 
 }

@@ -35,8 +35,20 @@ public class ListItemData {
     @Override
     public String toString() {
         if (arrayItem == null) {
-            return "NULL";
+            StringBuilder builder = new StringBuilder("NULL");
+            for (int i = 0; i < 52 - "NULL".length(); i++) {
+                builder.append(" ");
+            }
+            return builder.toString();
         }
-        return arrayItem.toString();
+        if (arrayItem.toString().length() > 50) {
+            return arrayItem.toString().substring(0, 50) + "...";
+        } else {
+            StringBuilder resultStr = new StringBuilder(arrayItem.toString());
+            for (int i = 0; i < 52 - arrayItem.toString().length(); i++) {
+                resultStr.append(" ");
+            }
+            return resultStr.toString();
+        }
     }
 }

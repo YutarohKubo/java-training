@@ -57,9 +57,9 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         try {
             Class<?> targetClazz = Class.forName(packageAndClassName);
             while (targetClazz != null) {
-                setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR);
-                setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
-                setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD);
+                setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR, "");
+                setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD, "");
+                setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD, "");
                 targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
             }
         } catch (ClassNotFoundException e) {
@@ -67,13 +67,13 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         }
     }
 
-    public void setupJListMember(Class<?> clazz) {
+    public void setupJListMember(Class<?> clazz, String memberName) {
         clearList();
         Class<?> targetClazz = clazz;
         while (targetClazz != null) {
-            setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR);
-            setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
-            setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD);
+            setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR, memberName);
+            setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD, memberName);
+            setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD, memberName);
             targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
         }
     }
@@ -87,11 +87,13 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
         }
     }
 
-    private void setListMemberToMember(Member[] members, MemberType type) {
+    private void setListMemberToMember(Member[] members, MemberType type, String partialMatchStr) {
         for (Member m : members) {
-            MemberData memberData = new MemberData(type, m);
-            listMember.add(memberData);
-            model.addElement(memberData);
+            if (m != null && m.getName().contains(partialMatchStr)) {
+                MemberData memberData = new MemberData(type, m);
+                listMember.add(memberData);
+                model.addElement(memberData);
+            }
         }
     }
 
@@ -114,11 +116,15 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
                     //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
                     if (displayInsideArrayPanel.getArrayElement() == null) {
                         controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                    } else {
+                        controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
                     }
                 } else {
                     //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
                     if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
                         controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                    } else {
+                        controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
                     }
                 }
             }

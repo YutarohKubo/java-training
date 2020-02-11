@@ -14,11 +14,13 @@ import java.util.List;
 public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellRenderer<ListItemData> {
 
     private JList<ListItemData> jListArray;
+    private JLabel jArrayTypeLabel;
     private DefaultListModel<ListItemData> model;
     private List<ListItemData> listArray = new ArrayList<>();
     private boolean fragChangeItem = false;
     private Object arrayData;
     private int arrayLength;
+    private int beforeSelectedItemIndex;
 
     public DisplayInsideArrayPanel() {
 
@@ -33,6 +35,8 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
     @Override
     void setupComponent() {
         model = new DefaultListModel<>();
+        jArrayTypeLabel = new JLabel();
+        jArrayTypeLabel.setBackground(Color.WHITE);
         jListArray = new JList<>(model);
         jListArray.setBackground(Color.CYAN);
         jListArray.setCellRenderer(this);
@@ -45,19 +49,24 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
         JScrollPane sp = new JScrollPane();
         sp.getViewport().setView(jListArray);
         sp.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-        this.add(new JTextField("hehehe"), BorderLayout.NORTH);
-        this.add(sp);
+        this.add(jArrayTypeLabel, BorderLayout.NORTH);
+        this.add(sp, BorderLayout.CENTER);
     }
 
     public void makeList(Class<?> clazz, int length) {
         this.arrayLength = length;
+        jListArray.setSelectedIndex(0);
+        jArrayTypeLabel.setText("配列の型: " + clazz.getTypeName());
         arrayData = Array.newInstance(clazz, length);
         reloadListArray();
+        jListArray.setSelectedIndex(0);
     }
 
     public void reMakeList(Class<?> clazz) {
+        jArrayTypeLabel.setText("配列の型: " + clazz.getTypeName());
         arrayData = Array.newInstance(clazz, this.arrayLength);
         reloadListArray();
+        jListArray.setSelectedIndex(0);
     }
 
     public void clearList() {
@@ -71,7 +80,9 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
 
     public void setArrayElement (Object createdInstance) {
         Array.set(arrayData, jListArray.getSelectedIndex(), createdInstance);
+        beforeSelectedItemIndex = jListArray.getSelectedIndex();
         reloadListArray();
+        jListArray.setSelectedIndex(beforeSelectedItemIndex);
     }
 
     public Object getArrayElement() {
