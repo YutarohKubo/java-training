@@ -89,7 +89,7 @@ public class DeclaredMemberListPanel extends InterpretPanel implements ListCellR
 
     private void setListMemberToMember(Member[] members, MemberType type, String partialMatchStr) {
         for (Member m : members) {
-            if (m != null && m.getName().contains(partialMatchStr)) {
+            if (m != null && partialMatchStr != null && m.getName().toLowerCase().contains(partialMatchStr.toLowerCase())) {
                 MemberData memberData = new MemberData(type, m);
                 listMember.add(memberData);
                 model.addElement(memberData);

@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 public class ControlConstructorPanel extends InterpretPanel {
 
@@ -18,6 +15,7 @@ public class ControlConstructorPanel extends InterpretPanel {
     private JButton executeButton;
     private JLabel[] checkContainValueLabel;
     private MemberData targetConstructorData;
+    private OperationAreaDialogPanel operationAreaDialogPanel;
 
     private DataHolder dataHolder;
 
@@ -37,6 +35,10 @@ public class ControlConstructorPanel extends InterpretPanel {
 
     public ControlConstructorPanel(Dialog parentDialog) {
         this.parentDialog = parentDialog;
+    }
+
+    public void setOperationAreaDialogPanel(OperationAreaDialogPanel operationAreaDialogPanel) {
+        this.operationAreaDialogPanel = operationAreaDialogPanel;
     }
 
     @Override
@@ -118,6 +120,13 @@ public class ControlConstructorPanel extends InterpretPanel {
                         dataHolder.generatedObject = targetConstructor.newInstance(dataHolder.args);
                         ConsoleAreaPanel.appendNewLog("Succeed in Creating Object.(" + targetConstructor.getName() + ")");
                     }
+                    if (operationAreaDialogPanel != null) {
+                        if (dataHolder == null || dataHolder.generatedObject == null) {
+                            operationAreaDialogPanel.setButtonDetermineState(false);
+                        } else {
+                            operationAreaDialogPanel.setButtonDetermineState(true);
+                        }
+                    }
                 } catch (InstantiationException ex) {
                     //抽象クラスなど、インスタンス化しようとしたとき
                     ConsoleAreaPanel.appendNewLog("Throw InstantiationException.");
@@ -134,10 +143,12 @@ public class ControlConstructorPanel extends InterpretPanel {
                     //targetConstructorの引数と一致しないとき
                     ConsoleAreaPanel.appendNewLog("Throw IllegalArgumentException.");
                     ex.printStackTrace();
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(appFrame, "配列を指定してください.\n配列の大きさが0の場合は、\nオブジェクト作れません");
                 }
             }
         });
-        System.out.println("action listener length before = " + executeButton.getActionListeners().length);
         executeButton.setAlignmentX(0.5f);
         buttonPanel.add(executeButton);
         this.add(buttonPanel);

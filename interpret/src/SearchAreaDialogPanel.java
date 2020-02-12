@@ -3,21 +3,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SearchAreaPanel extends InterpretPanel {
+public class SearchAreaDialogPanel extends InterpretPanel {
 
-    private DeclaredMemberListPanel declaredMemberListPanel;
-    private DisplayInsideArrayPanel displayInsideArrayPanel;
+    private DeclaredMemberListDialogPanel declaredMemberListDialogPanel;
     private JTextField textPackageClassField;
     private JTextField textMemberNameField;
-    private AppFrame frame;
     private JButton buttonShow;
     private JButton buttonPartialShow;
 
-    public SearchAreaPanel(AppFrame frame, DeclaredMemberListPanel declaredMemberListPanel, DisplayInsideArrayPanel displayInsideArrayPanel) {
+    public SearchAreaDialogPanel(DeclaredMemberListDialogPanel declaredMemberListDialogPanel) {
         this.setBackground(AppStyle.INDIGO);
-        this.frame = frame;
-        this.declaredMemberListPanel = declaredMemberListPanel;
-        this.displayInsideArrayPanel = displayInsideArrayPanel;
+        this.declaredMemberListDialogPanel = declaredMemberListDialogPanel;
     }
 
     @Override
@@ -39,7 +35,7 @@ public class SearchAreaPanel extends InterpretPanel {
         Font textMemberNameFont = new Font("SansSerif", Font.PLAIN, 16);
         textMemberName.setFont(textMemberNameFont);
         textMemberName.setForeground(AppStyle.WHITE);
-        textMemberNameField = new JTextField(15);
+        textMemberNameField = new JTextField(10);
         Font textMemberNameFieldFont = new Font("SansSerif", Font.PLAIN, 12);
         textMemberNameField.setFont(textMemberNameFieldFont);
         buttonShow = new JButton("表示");
@@ -53,13 +49,10 @@ public class SearchAreaPanel extends InterpretPanel {
                     ConsoleAreaPanel.appendNewLog("Throw ClassNotFoundException.");
                     ex.printStackTrace();
                 }
-                declaredMemberListPanel.setupJListMember(targetClazz, "");
-                /*if (frame.isArrayPanelVisible()) {
-                    displayInsideArrayPanel.reMakeList(targetClazz);
-                }*/
+                declaredMemberListDialogPanel.setupJListMember(targetClazz, "");
             }
         });
-        buttonPartialShow = new JButton("絞り込み表示");
+        buttonPartialShow = new JButton("絞込み");
         buttonPartialShow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,19 +63,23 @@ public class SearchAreaPanel extends InterpretPanel {
                     ConsoleAreaPanel.appendNewLog("Throw ClassNotFoundException.");
                     ex.printStackTrace();
                 }
-                declaredMemberListPanel.setupJListMember(targetClazz, textMemberNameField.getText());
+                declaredMemberListDialogPanel.setupJListMember(targetClazz, textMemberNameField.getText());
             }
         });
         this.add(textPackageClass);
         this.add(textPackageClassField);
         this.add(buttonShow);
-        this.add(setMargin(textMemberName, 0, 50, 0, 0));
+        this.add(setMargin(textMemberName, 0, 10, 0, 0));
         this.add(textMemberNameField);
         this.add(buttonPartialShow);
     }
 
     public String getPackageClassFieldText() {
         return textPackageClassField.getText();
+    }
+
+    public void setPackageClassFieldText(String text) {
+        textPackageClassField.setText(text);
     }
 
 }

@@ -7,6 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,22 +53,37 @@ public class DeclaredMemberListDialogPanel extends InterpretPanel implements Lis
     public void setupJListMember(String packageAndClassName) {
         try {
             Class<?> targetClazz = Class.forName(packageAndClassName);
-            while (targetClazz != null) {
-                setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR);
-                setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD);
-                setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD);
-                targetClazz = (Class<?>) targetClazz.getGenericSuperclass();
-            }
+            setListMemberToMember(targetClazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR, "");
+            setListMemberToMember(targetClazz.getDeclaredFields(), MemberType.FIELD, "");
+            setListMemberToMember(targetClazz.getDeclaredMethods(), MemberType.METHOD, "");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void setListMemberToMember(Member[] members, MemberType type) {
+    public void setupJListMember(Class<?> clazz, String memberName) {
+        clearList();
+        setListMemberToMember(clazz.getDeclaredConstructors(), MemberType.CONSTRUCTOR, memberName);
+        setListMemberToMember(clazz.getDeclaredFields(), MemberType.FIELD, memberName);
+        setListMemberToMember(clazz.getDeclaredMethods(), MemberType.METHOD, memberName);
+    }
+
+    private void setListMemberToMember(Member[] members, MemberType type, String partialMatchStr) {
         for (Member m : members) {
-            MemberData memberData = new MemberData(type, m);
-            listMember.add(memberData);
-            model.addElement(memberData);
+            if (m != null && partialMatchStr != null && m.getName().toLowerCase().contains(partialMatchStr.toLowerCase())) {
+                MemberData memberData = new MemberData(type, m);
+                listMember.add(memberData);
+                model.addElement(memberData);
+            }
+        }
+    }
+
+    public void clearList() {
+        if (listMember != null) {
+            listMember.clear();
+        }
+        if (model != null) {
+            model.clear();
         }
     }
 
@@ -83,10 +99,20 @@ public class DeclaredMemberListDialogPanel extends InterpretPanel implements Lis
         itemPanel.setBorder(new CompoundBorder(itemPanel.getBorder(), new EmptyBorder(0, 0, 0, 0)));
 
         if (isSelected) {
-            if (value.getMemberType() == MemberType.CONSTRUCTOR) {
-                operationAreaDialogPanel.setButtonDetermineState(true);
+            if (Modifier.isStatic(value.getMember().getModifiers()) || value.getMemberType() == MemberType.CONSTRUCTOR) {
+                controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
             } else {
+                //非staticなField,Methodに関しては、オブジェクトが生成されていなければ、実行ボタンを無効にする
+                if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
+                    controlMemberPanel.setExecuteButtonState(value.getMemberType(), false);
+                } else {
+                    controlMemberPanel.setExecuteButtonState(value.getMemberType(), true);
+                }
+            }
+            if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null) {
                 operationAreaDialogPanel.setButtonDetermineState(false);
+            } else {
+                operationAreaDialogPanel.setButtonDetermineState(true);
             }
             //項目選択時の色反映させるための処理
             itemPanel.setOpaque(true);
@@ -98,7 +124,7 @@ public class DeclaredMemberListDialogPanel extends InterpretPanel implements Lis
                 fragChangeItem = false;
             }
         }
-
         return itemPanel;
     }
 }
+

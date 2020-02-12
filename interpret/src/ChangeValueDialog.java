@@ -47,6 +47,7 @@ public class ChangeValueDialog extends JDialog {
     ControlFieldPanel controlFieldPanel;
     ControlMethodPanel controlMethodPanel;
     ControlConstructorPanel controlConstructorPanel;
+    SearchAreaDialogPanel searchAreaDialogPanel;
 
     public ChangeValueDialog(Frame frame, InterpretPanel panel, java.lang.reflect.Type type, int changeIndex) {
         super(frame, true);
@@ -69,16 +70,31 @@ public class ChangeValueDialog extends JDialog {
         controlMethodPanel = new ControlMethodPanel(this, controlConstructorPanel);
         controlMemberPanel = new ControlMemberPanel(controlFieldPanel, controlMethodPanel, controlConstructorPanel);
         operationAreaDialogPanel = new OperationAreaDialogPanel(this, controlMemberPanel);
+        controlConstructorPanel.setOperationAreaDialogPanel(operationAreaDialogPanel);
         declaredMemberListDialogPanel = new DeclaredMemberListDialogPanel(controlMemberPanel, operationAreaDialogPanel);
         declaredMemberListDialogPanel.setupJListMember(memberType.getTypeName());
         mainAreaDialogPanel.add(declaredMemberListDialogPanel, "declared_member_list_dialog_panel");
+        searchAreaDialogPanel = new SearchAreaDialogPanel(declaredMemberListDialogPanel);
+        searchAreaDialogPanel.setPackageClassFieldText(memberType.getTypeName());
+        this.add(searchAreaDialogPanel, BorderLayout.NORTH);
         this.add(operationAreaDialogPanel, BorderLayout.WEST);
         this.add(mainAreaDialogPanel, BorderLayout.CENTER);
+        if (controlMemberPanel.getConstructorPanelDataHolder() == null || controlMemberPanel.getConstructorPanelDataHolder().generatedObject == null){
+            operationAreaDialogPanel.setButtonDetermineState(false);
+        } else {
+            operationAreaDialogPanel.setButtonDetermineState(true);
+        }
     }
 
     private void initForPrimitive() {
         setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
         setLayout(new BorderLayout());
+        JPanel typeLabelPanel = new JPanel();
+        JLabel typeLabel = new JLabel("型名 : " + memberType.getTypeName());
+        Font textTypeLabelFont = new Font("SansSerif", Font.PLAIN, 24);
+        typeLabel.setFont(textTypeLabelFont);
+        typeLabelPanel.add(typeLabel);
+        typeLabelPanel.setAlignmentX(0.5f);
         PanelInputText valueChangePanel = new PanelInputText("値");
         executeButton = new JButton("決定");
         System.out.println("memberType = " + memberType.getTypeName());
@@ -296,6 +312,7 @@ public class ChangeValueDialog extends JDialog {
                 break;
             default:
         }
+        add(typeLabelPanel, BorderLayout.NORTH);
         add(valueChangePanel, BorderLayout.CENTER);
         add(executeButton, BorderLayout.SOUTH);
     }

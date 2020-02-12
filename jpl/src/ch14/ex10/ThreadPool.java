@@ -138,6 +138,9 @@ public class ThreadPool {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        if (isPoolFull()) {
+            this.runnables = new Runnable[queueSize];
+        }
         for (int i = 0; i < numberOfThreads; i++) {
             if ((this.runnables[i] == runnable && this.runnables[numberOfThreads-1] != null) || this.runnables[i] == null) {
                 this.runnables[i] = runnable;
@@ -148,4 +151,14 @@ public class ThreadPool {
             }
         }
     }
+
+    private boolean isPoolFull() {
+        for (Runnable runnable : runnables) {
+            if (runnable == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
