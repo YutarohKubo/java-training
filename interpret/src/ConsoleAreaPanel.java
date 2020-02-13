@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class ConsoleAreaPanel extends InterpretPanel {
 
@@ -34,5 +36,13 @@ public class ConsoleAreaPanel extends InterpretPanel {
 
     public static void appendNewLog (String logText) {
         textArea.append(logText + "\n");
+    }
+
+    public static void writeStackTrace(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        pw.flush();
+        appendNewLog(sw.toString());
     }
 }

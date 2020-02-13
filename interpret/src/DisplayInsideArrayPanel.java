@@ -18,6 +18,9 @@ public class DisplayInsideArrayPanel extends InterpretPanel implements ListCellR
     private DefaultListModel<ListItemData> model;
     private List<ListItemData> listArray = new ArrayList<>();
     private boolean fragChangeItem = false;
+    /**
+     * 生成オブジェクトを格納する配列
+     */
     private Object arrayData;
     private int arrayLength;
     private int beforeSelectedItemIndex;

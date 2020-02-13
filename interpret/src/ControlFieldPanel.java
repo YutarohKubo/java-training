@@ -17,11 +17,17 @@ public class ControlFieldPanel extends InterpretPanel {
     private JButton changeValueButton;
     private JButton executeButton;
     private JLabel checkContainValueLabel;
+    /**
+     * 操作対象フィールド
+     */
     private MemberData targetFieldData;
 
     private DataHolder dataHolder;
 
     public class DataHolder {
+        /**
+         * 変更する値
+         */
         public Object value;
     }
 
@@ -35,7 +41,8 @@ public class ControlFieldPanel extends InterpretPanel {
         this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
-    public ControlFieldPanel(Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
+    public ControlFieldPanel(AppFrame appFrame, Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
+        this.appFrame = appFrame;
         this.parentDialog = parentDialog;
         this.controlConstructorPanel = controlConstructorPanel;
     }
@@ -101,6 +108,7 @@ public class ControlFieldPanel extends InterpretPanel {
         if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
+        //フィールド値変更ボタン
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

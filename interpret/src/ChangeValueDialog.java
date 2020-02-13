@@ -10,6 +10,8 @@ public class ChangeValueDialog extends JDialog {
 
     public static final int DIALOG_WIDTH = 960;
     public static final int DIALOG_HEIGHT = 540;
+    public static final int START_LOCATION_X = 160;
+    public static final int START_LOCATION_Y = 90;
 
     private static Map<String, String> mapType = new HashMap<String, String>() {
         {
@@ -38,7 +40,7 @@ public class ChangeValueDialog extends JDialog {
     InterpretPanel panel;
     int changeIndex;
     JButton executeButton;
-    Frame frame;
+    AppFrame frame;
 
     MainAreaDialogPanel mainAreaDialogPanel;
     DeclaredMemberListDialogPanel declaredMemberListDialogPanel;
@@ -49,8 +51,9 @@ public class ChangeValueDialog extends JDialog {
     ControlConstructorPanel controlConstructorPanel;
     SearchAreaDialogPanel searchAreaDialogPanel;
 
-    public ChangeValueDialog(Frame frame, InterpretPanel panel, java.lang.reflect.Type type, int changeIndex) {
+    public ChangeValueDialog(AppFrame frame, InterpretPanel panel, java.lang.reflect.Type type, int changeIndex) {
         super(frame, true);
+        this.frame = frame;
         this.panel = panel;
         this.memberType = type;
         this.changeIndex = changeIndex;
@@ -59,15 +62,17 @@ public class ChangeValueDialog extends JDialog {
         } else {
             initNotForPrimitive();
         }
+        setLocation(frame.getX() + START_LOCATION_X, frame.getY() + START_LOCATION_Y);
     }
 
     private void initNotForPrimitive() {
         setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
+
         setLayout(new BorderLayout());
         mainAreaDialogPanel = new MainAreaDialogPanel();
-        controlConstructorPanel = new ControlConstructorPanel(this);
-        controlFieldPanel = new ControlFieldPanel(this, controlConstructorPanel);
-        controlMethodPanel = new ControlMethodPanel(this, controlConstructorPanel);
+        controlConstructorPanel = new ControlConstructorPanel(frame, this);
+        controlFieldPanel = new ControlFieldPanel(frame, this, controlConstructorPanel);
+        controlMethodPanel = new ControlMethodPanel(frame, this, controlConstructorPanel);
         controlMemberPanel = new ControlMemberPanel(controlFieldPanel, controlMethodPanel, controlConstructorPanel);
         operationAreaDialogPanel = new OperationAreaDialogPanel(this, controlMemberPanel);
         controlConstructorPanel.setOperationAreaDialogPanel(operationAreaDialogPanel);
@@ -97,7 +102,6 @@ public class ChangeValueDialog extends JDialog {
         typeLabelPanel.setAlignmentX(0.5f);
         PanelInputText valueChangePanel = new PanelInputText("値");
         executeButton = new JButton("決定");
-        System.out.println("memberType = " + memberType.getTypeName());
         switch (memberType.getTypeName()) {
             case "java.lang.String":
                 executeButton.addActionListener(new ActionListener() {

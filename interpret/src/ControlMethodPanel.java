@@ -15,11 +15,17 @@ public class ControlMethodPanel extends InterpretPanel {
     private JButton[] methodArgumentButtons;
     private JButton executeButton;
     private JLabel[] checkContainValueLabel;
+    /**
+     * 実行対象のメソッド
+     */
     private MemberData targetMethodData;
 
     private DataHolder dataHolder;
 
     public class DataHolder {
+        /**
+         * メソッドの引数
+         */
         public Object[] args;
     }
 
@@ -33,7 +39,8 @@ public class ControlMethodPanel extends InterpretPanel {
         this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
-    public ControlMethodPanel(Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
+    public ControlMethodPanel(AppFrame frame, Dialog parentDialog, ControlConstructorPanel controlConstructorPanel) {
+        this.appFrame = frame;
         this.parentDialog = parentDialog;
         this.controlConstructorPanel = controlConstructorPanel;
     }
@@ -101,7 +108,7 @@ public class ControlMethodPanel extends InterpretPanel {
         if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
-        //メソッド実行ボタンの挙動設定
+        //メソッド実行ボタン
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,9 +135,7 @@ public class ControlMethodPanel extends InterpretPanel {
                     ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
-                    for (StackTraceElement ste : ex.getStackTrace()) {
-                        ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException Caused by " + ste.getFileName());
-                    }
+                    ConsoleAreaPanel.writeStackTrace(ex);
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
                     ConsoleAreaPanel.appendNewLog("Throw IllegalArgumentException.");

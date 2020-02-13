@@ -198,12 +198,10 @@ public class OperationAreaPanel extends InterpretPanel {
         }
         //ジェネリクス配列型の時
         if (field.getGenericType() instanceof GenericArrayType) {
-            System.out.println("FieldName = " + field.getName());
             GenericArrayType genericArrayType = (GenericArrayType) field.getGenericType();
             //E[]型のとき
             if (genericArrayType.getGenericComponentType() instanceof TypeVariable<?>) {
                 TypeVariable<?> typeVariable = (TypeVariable<?>) genericArrayType.getGenericComponentType();
-                System.out.println("TypeVariableFieldName = " + field.getName());
                 sb.append(typeVariable.getName());
                 sb.append("[]");
             }

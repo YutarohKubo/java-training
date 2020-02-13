@@ -28,8 +28,11 @@ public class ThreadPool {
     private int queueSize;
     private int numberOfThreads;
     private Thread[] threads;
+    //dispatchで渡されるタスク
     private Runnable[] runnables;
+    //スレッド内処理を実行させるフラグ
     private volatile boolean[] fragStart;
+    //キュー内Indexに対応したロックオブジェクト
     private static Object[] locks;
 
     /**
@@ -142,6 +145,8 @@ public class ThreadPool {
             this.runnables = new Runnable[queueSize];
         }
         for (int i = 0; i < numberOfThreads; i++) {
+            //Poolが満杯であるときに関してキュー内に既に同じrunnableが存在すれば、そこに対して上書きする
+            //満杯でなければ、キュー内の一番若いIndexにrunnableを格納する
             if ((this.runnables[i] == runnable && this.runnables[numberOfThreads-1] != null) || this.runnables[i] == null) {
                 this.runnables[i] = runnable;
                 synchronized (locks[i]) {

@@ -14,13 +14,22 @@ public class ControlConstructorPanel extends InterpretPanel {
     private JButton[] constructorArgumentButtons;
     private JButton executeButton;
     private JLabel[] checkContainValueLabel;
+    /**
+     * 実行対象コンストラクタ
+     */
     private MemberData targetConstructorData;
     private OperationAreaDialogPanel operationAreaDialogPanel;
 
     private DataHolder dataHolder;
 
     public class DataHolder {
+        /**
+         * 生成されたオブジェクト
+         */
         public Object generatedObject;
+        /**
+         * 実行するコンストラクタの引数
+         */
         public Object[] args;
     }
 
@@ -33,7 +42,8 @@ public class ControlConstructorPanel extends InterpretPanel {
         this.displayInsideArrayPanel = displayInsideArrayPanel;
     }
 
-    public ControlConstructorPanel(Dialog parentDialog) {
+    public ControlConstructorPanel(AppFrame appFrame, Dialog parentDialog) {
+        this.appFrame = appFrame;
         this.parentDialog = parentDialog;
     }
 
@@ -105,10 +115,10 @@ public class ControlConstructorPanel extends InterpretPanel {
             checkContainValueInArgPanel[i].add(checkContainValueLabel[i]);
             buttonPanel.add(checkContainValueInArgPanel[i]);
         }
-        System.out.println("action listener length before = " + executeButton.getActionListeners().length);
         if (executeButton.getActionListeners().length >= 1) {
             executeButton.removeActionListener(executeButton.getActionListeners()[0]);
         }
+        //コンストラクタ実行ボタン
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -137,9 +147,7 @@ public class ControlConstructorPanel extends InterpretPanel {
                     ex.printStackTrace();
                 } catch (InvocationTargetException ex) {
                     //コンストラクタ自身が例外をThrowしたとき
-                    for (StackTraceElement ste : ex.getStackTrace()) {
-                        ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException Caused by " + ex.getMessage());
-                    }
+                    ConsoleAreaPanel.writeStackTrace(ex);
                     ex.printStackTrace();
                 } catch (IllegalArgumentException ex) {
                     //targetConstructorの引数と一致しないとき
