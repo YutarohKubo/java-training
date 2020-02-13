@@ -137,7 +137,9 @@ public class ControlConstructorPanel extends InterpretPanel {
                     ex.printStackTrace();
                 } catch (InvocationTargetException ex) {
                     //コンストラクタ自身が例外をThrowしたとき
-                    ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException.");
+                    for (StackTraceElement ste : ex.getStackTrace()) {
+                        ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException Caused by " + ex.getMessage());
+                    }
                     ex.printStackTrace();
                 } catch (IllegalArgumentException ex) {
                     //targetConstructorの引数と一致しないとき

@@ -128,7 +128,9 @@ public class ControlMethodPanel extends InterpretPanel {
                     ConsoleAreaPanel.appendNewLog("Throw IllegalAccessException.");
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
-                    ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException.");
+                    for (StackTraceElement ste : ex.getStackTrace()) {
+                        ConsoleAreaPanel.appendNewLog("Throw InvocationTargetException Caused by " + ste.getFileName());
+                    }
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
                     ConsoleAreaPanel.appendNewLog("Throw IllegalArgumentException.");
