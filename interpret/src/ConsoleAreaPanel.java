@@ -44,7 +44,12 @@ public class ConsoleAreaPanel extends InterpretPanel {
         ex.printStackTrace(pw);
         pw.flush();
         String stackTrace = sw.toString();
-        String stackTraceAfterCausedBy = stackTrace.substring(stackTrace.indexOf("Caused by"));
-        appendNewLog(stackTraceAfterCausedBy);
+        String resultExceptionStr;
+        if (stackTrace.contains("Caused by")) {
+            resultExceptionStr = stackTrace.substring(stackTrace.indexOf("Caused by")).replace("Caused by", "Throw");
+        } else {
+            resultExceptionStr = stackTrace;
+        }
+        appendNewLog(resultExceptionStr);
     }
 }

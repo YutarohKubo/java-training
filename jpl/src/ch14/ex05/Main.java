@@ -5,10 +5,10 @@ public class Main {
         Value value = new Value();
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                value.incrementValue();
+                value.decrementValue();
             }
             for (int i = 0; i < 1000; i++) {
-                value.decrementValue();
+                value.incrementValue();
             }
         });
         Thread thread2 = new Thread(() -> {
