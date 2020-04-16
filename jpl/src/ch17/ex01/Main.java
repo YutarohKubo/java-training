@@ -6,8 +6,8 @@ public class Main {
         Runtime rt = Runtime.getRuntime();
         long freeMemory1 = rt.freeMemory();
         System.out.println("free memory when app launch = " + freeMemory1);
-        for (int i = 0; i < 10000; i++) {
-            String str = new String("hogehogehogehoge");
+        for (int i = 0; i < 100000000; i++) {
+            new String("hogehogehogehoge");
         }
         long freeMemory2 = rt.freeMemory();
         System.out.println("free memory after created many String = " + freeMemory2);
