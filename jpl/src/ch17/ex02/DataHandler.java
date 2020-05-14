@@ -17,7 +17,7 @@ public class DataHandler {
         if (lastFile != null) {
             tmpFile = lastFile.get();
         }
-        if (tmpFile != null) {
+        if (tmpFile != null && tmpFile.equals(file)) {
             /*System.out.println("last file is saved.");
             if (file.equals(tmpFile)) {
                 data = lastData.get();
@@ -33,6 +33,7 @@ public class DataHandler {
         }
 
         data = readBytesFromFile(file);
+        //このブロックが処理されている間は、fileは強参照なのでlastFileがnullになることはない
         lastFile = new WeakReference<File>(file);
         lastData = new WeakReference<byte[]>(data);
         return data;

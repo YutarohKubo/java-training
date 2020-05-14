@@ -9,7 +9,7 @@ public class Main {
 
         String cd = System.getProperty("user.dir");
         for (int i = 0; i < 1000; i++) {
-            System.out.println(i + " : " + new String(dataHandler.readFile(new File(cd + "\\src\\ch17\\ex02\\hello1"))));
+            System.out.println(i + " : " + new String(dataHandler.readFile(new File(cd + "\\src\\ch17\\ex02\\hello"))));
             useManyMemory();
         }
     }
