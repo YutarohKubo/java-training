@@ -40,7 +40,8 @@ public class MyClockFrame extends JWindow implements MouseListener, MouseMotionL
         JMenu menuSettingTimeColor = new JMenu("Time color");
         JMenu menuSettingBackgroundColor = new JMenu("Background color");
         JMenu menuSettingFont = new JMenu("Font");
-        MenuScroller menuSettingFontScroller = MenuScroller.setScrollerFor(menuSettingFont);
+        //フォント選択メニューに対して、スクロールできるよう対応する
+        MenuScroller.setScrollerFor(menuSettingFont);
         JMenu menuSettingFontSize = new JMenu("Font size");
 
         final Property.AppColor[] colors = Property.getAppColors();
