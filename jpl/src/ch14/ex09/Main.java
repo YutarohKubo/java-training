@@ -3,11 +3,17 @@ package ch14.ex09;
 public class Main {
 
     public static void main(String[] args) {
-        ThreadGroup tg = Thread.currentThread().getThreadGroup();
+        double c;
+        c = 3/5;
+        System.out.println(c);
+        /*ThreadGroup tg = Thread.currentThread().getThreadGroup();
+        System.out.println(tg.getName());
         Thread[] threads = new Thread[10];
         tg.enumerate(threads);
         for (Thread th : threads) {
-            System.out.println(th.getName());
+            if (th != null) {
+                System.out.println(th.getName());
+            }
         }
         ThreadGroup groupParent = new ThreadGroup("parent");
         ThreadGroup groupChild1 = new ThreadGroup(groupParent, "child1");
@@ -50,7 +56,7 @@ public class Main {
         ThreadHierarchy th = new ThreadHierarchy();
         th.startInspectThreadGroup(groupParent);
         th.startInspectThreadGroup(groupChild1);
-        th.startInspectThreadGroup(groupChild2);
+        th.startInspectThreadGroup(groupChild2);*/
     }
 
 }

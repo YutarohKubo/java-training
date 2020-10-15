@@ -31,6 +31,8 @@ public class MyClockFrame extends JWindow implements MouseListener, MouseMotionL
 
         JMenuItem menuItemSetting = new JMenuItem("Setting");
         menuItemSetting.addActionListener((e) -> {
+            System.out.println("current thread = " + Thread.currentThread());
+            Main.displayThreadsAllList(Thread.currentThread().getThreadGroup());
             PropertyDialog propertyDialog = new PropertyDialog(MyClockFrame.this, "Setting");
             propertyDialog.setOnOkClickListener((dialog) -> {
                 mProperty.setTimeFont(propertyDialog.getChoosedFont());
