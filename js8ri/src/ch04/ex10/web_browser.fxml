@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.web.WebView?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ch04.ex10.WebController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <BorderPane>
+            <left>
+                <HBox>
+                    <Button fx:id="buttonPrev"
+                            text="前へ"
+                            disable="true"
+                            onAction="#onClickPrev"/>
+                    <Button fx:id="buttonNext"
+                            text="次へ"
+                            disable="true"
+                            onAction="#onClickNext"/>
+                </HBox>
+            </left>
+            <center>
+                <TextField fx:id="fieldAddress"/>
+            </center>
+            <right>
+                <Button fx:id="buttonSearch"
+                        text="検索"
+                        onAction="#onClickSearch"/>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <WebView fx:id="webView"/>
+    </center>
+
+</BorderPane>
