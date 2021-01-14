@@ -1,0 +1,5 @@
+C:\java_training\js8ri\src\ch09\ex11\docdir\dir1/document4.txt:3475823
+C:\java_training\js8ri\src\ch09\ex11\docdir\dir1/document4.txt: 5748394
+C:\java_training\js8ri\src\ch09\ex11\docdir\dir2/document5.txt:7583948
+C:\java_training\js8ri\src\ch09\ex11\docdir\dir2/document5.txt:3849384758
+C:\java_training\js8ri\src\ch09\ex11\docdir\dir2/document5.txt:3839849 228
